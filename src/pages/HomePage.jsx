@@ -5,6 +5,7 @@ import { Categories } from '../components/Categories';
 import { ProductGrid } from '../components/ProductGrid';
 import { SpecialOffer } from '../components/SpecialOffer';
 import { Testimonials } from '../components/Testimonials';
+import { BoardsWorkedWith } from '../components/BoardsWorkedWith';
 
 export const HomePage = () => {
   return (
@@ -15,6 +16,7 @@ export const HomePage = () => {
       <ProductGrid title="Best Selling Products" />
       <SpecialOffer />
       <Testimonials />
+      <BoardsWorkedWith />
     </main>
   );
 };
