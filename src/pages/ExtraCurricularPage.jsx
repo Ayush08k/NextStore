@@ -120,7 +120,8 @@ export const ExtraCurricularPage = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))
+        )}
       </div>
 
       {/* Booking Slot Modal */}
