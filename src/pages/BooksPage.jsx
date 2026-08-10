@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { BookOpen, CheckCircle, ShoppingCart, Award, Sparkles, Compass } from 'lucide-react';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 export const BooksPage = () => {
   const { addToCart } = useContext(ShopContext);
@@ -379,7 +380,7 @@ export const BooksPage = () => {
 
       {/* Official Prescribed Books Display */}
       {loading ? (
-        <div style={{ padding: '40px', textAlign: 'center', color: '#6b7280' }}>Loading prescribed book kit...</div>
+        <SkeletonLoader type="list" count={4} />
       ) : books.length > 0 ? (
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>

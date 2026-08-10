@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { Trophy, Star, Calendar, Clock, CheckCircle, UserCheck } from 'lucide-react';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 export const ExtraCurricularPage = () => {
-  const { coaches, addToCart } = useContext(ShopContext);
+  const { coaches, addToCart, isLoadingCoaches } = useContext(ShopContext);
   const [selectedSport, setSelectedSport] = useState('All');
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [bookingDate, setBookingDate] = useState('2026-08-15');
@@ -67,7 +68,10 @@ export const ExtraCurricularPage = () => {
 
       {/* Coaches Grid */}
       <div className="grid-2" style={{ marginBottom: '40px' }}>
-        {filteredCoaches.map((coach) => (
+        {isLoadingCoaches ? (
+          <SkeletonLoader type="list" count={4} />
+        ) : (
+          filteredCoaches.map((coach) => (
           <div
             key={coach.id}
             style={{
@@ -117,6 +121,7 @@ export const ExtraCurricularPage = () => {
             </div>
           </div>
         ))}
+        )}
       </div>
 
       {/* Booking Slot Modal */}

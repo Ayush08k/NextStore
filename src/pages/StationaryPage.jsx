@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { ShoppingBag, Sparkles, ShoppingCart, Search, Filter, CheckCircle } from 'lucide-react';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 export const StationaryPage = () => {
-  const { products, addToCart } = useContext(ShopContext);
+  const { products, addToCart, isLoadingProducts } = useContext(ShopContext);
 
   // Customized Bag Studio State
   const [studentName, setStudentName] = useState('ALEX SMITH');
@@ -176,7 +177,9 @@ export const StationaryPage = () => {
       </div>
 
       {/* STATIONERY PRODUCTS GRID */}
-      {filteredProducts.length === 0 ? (
+      {isLoadingProducts ? (
+        <SkeletonLoader type="product" count={8} />
+      ) : filteredProducts.length === 0 ? (
         <div className="form-card" style={{ textAlign: 'center', padding: '50px', color: '#6b7280' }}>
           <Filter size={48} color="#d1d5db" style={{ marginBottom: '12px' }} />
           <p style={{ fontSize: '16px', fontWeight: 600 }}>No stationery items match your selected filter or search.</p>

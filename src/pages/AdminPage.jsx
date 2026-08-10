@@ -123,7 +123,7 @@ export const AdminPage = () => {
     if (!deleteTarget) return;
 
     try {
-      const res = await fetch(`/api/${activeTab}/${deleteTarget.id}`, {
+      const res = await fetch(`/api/${activeTab}?id=${deleteTarget.id}`, {
         method: 'DELETE'
       });
       if (res.ok) {

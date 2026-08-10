@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { ShoppingCart, Shirt, MapPin, School, SlidersHorizontal, ImageOff } from 'lucide-react';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 const GENDER_FILTERS = ['All', 'Boys', 'Girls', 'Unisex'];
 
@@ -180,7 +181,7 @@ export const DressPage = () => {
 
       {/* ─── LOADING ─── */}
       {loading && (
-        <div style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>Loading uniform catalog…</div>
+        <SkeletonLoader type="product" count={4} />
       )}
 
       {/* ─── UNIFORM GRID ─── */}

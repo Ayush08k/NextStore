@@ -10,9 +10,12 @@ export const ShopProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState([]);
   const [coaches, setCoaches] = useState([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [isLoadingCoaches, setIsLoadingCoaches] = useState(true);
 
   // Fetch initial products
   const fetchProducts = async () => {
+    setIsLoadingProducts(true);
     try {
       const res = await fetch('/api/products');
       if (res.ok) {
@@ -21,11 +24,14 @@ export const ShopProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Failed to fetch products:', err);
+    } finally {
+      setIsLoadingProducts(false);
     }
   };
 
   // Fetch initial coaches
   const fetchCoaches = async () => {
+    setIsLoadingCoaches(true);
     try {
       const res = await fetch('/api/coaches');
       if (res.ok) {
@@ -34,6 +40,8 @@ export const ShopProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Failed to fetch coaches:', err);
+    } finally {
+      setIsLoadingCoaches(false);
     }
   };
 
@@ -104,8 +112,10 @@ export const ShopProvider = ({ children }) => {
         products,
         setProducts,
         fetchProducts,
+        isLoadingProducts,
         coaches,
         fetchCoaches,
+        isLoadingCoaches,
         cartCount,
         cartTotal
       }}
