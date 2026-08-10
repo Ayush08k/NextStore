@@ -142,27 +142,51 @@ a {
 }
 
 .nav-pill-item {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 13.5px;
-  color: #555d66;
+  color: #4b5563;
   padding: 6px 14px;
-  border-radius: 18px;
-  transition: all 0.2s ease;
+  border-radius: 20px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
 }
 
+/* Animated Bottom Indicator Line on Hover */
+.nav-pill-item::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 14px;
+  right: 14px;
+  height: 2.5px;
+  background: linear-gradient(90deg, #6c804b, #4a5c32);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
 .nav-pill-item:hover {
-  color: var(--primary-green-dark);
-  background: rgba(240, 244, 234, 0.8);
+  color: #4a5c32;
+  background: rgba(108, 128, 75, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-pill-item:hover::after {
+  transform: scaleX(1);
 }
 
 .nav-pill-item.active {
-  color: var(--primary-green-dark);
-  background: #ffffff;
+  color: #ffffff;
+  background: linear-gradient(135deg, #6c804b 0%, #4a5c32 100%);
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 14px rgba(108, 128, 75, 0.3);
+}
+
+.nav-pill-item.active::after {
+  display: none;
 }
 
 /* Search Box & Action Buttons */
