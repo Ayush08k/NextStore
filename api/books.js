@@ -1,6 +1,6 @@
-import { db } from './lib/firebase.js';
+const { db } = require('./lib/firebase');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
 
@@ -10,32 +10,22 @@ export default async function handler(req, res) {
     try {
       const { school_id, class_grade, board } = req.query;
       let booksRef = db.collection('books');
-      
+
       if (school_id) booksRef = booksRef.where('school_id', '==', school_id.toString());
       if (class_grade) booksRef = booksRef.where('class_grade', '==', class_grade);
       if (board) booksRef = booksRef.where('board', '==', board);
 
       const snapshot = await booksRef.get();
-      const books = [];
-      
-      // The frontend expects school_name and city appended from the schools table, but the migration 
-      // might not have done that perfectly unless we denormalize or fetch it here.
-      // Let's fetch the schools once to map them.
+
       const schoolsSnapshot = await db.collection('schools').get();
       const schoolsMap = {};
-      schoolsSnapshot.forEach(doc => {
-        schoolsMap[doc.id] = doc.data();
-      });
+      schoolsSnapshot.forEach(doc => { schoolsMap[doc.id] = doc.data(); });
 
+      const books = [];
       snapshot.forEach(doc => {
         const data = doc.data();
         const schoolData = schoolsMap[data.school_id] || {};
-        books.push({ 
-          id: doc.id, 
-          ...data,
-          school_name: schoolData.name || 'Unknown',
-          city: schoolData.city || 'Unknown'
-        });
+        books.push({ id: doc.id, ...data, school_name: schoolData.name || 'Unknown', city: schoolData.city || 'Unknown' });
       });
 
       return res.status(200).json(books);
@@ -56,12 +46,9 @@ export default async function handler(req, res) {
       if (!lastDoc.empty) nextId = parseInt(lastDoc.docs[0].id) + 1;
 
       await db.collection('books').doc(nextId.toString()).set({
-        school_id: school_id.toString(),
-        class_grade,
-        subject: subject || 'General',
-        book_title,
-        publisher: publisher || 'Standard',
-        price: parseFloat(price)
+        school_id: school_id.toString(), class_grade,
+        subject: subject || 'General', book_title,
+        publisher: publisher || 'Standard', price: parseFloat(price)
       });
       return res.status(200).json({ success: true, id: nextId });
     } catch (error) {
@@ -72,7 +59,7 @@ export default async function handler(req, res) {
   if (req.method === 'DELETE') {
     try {
       const { id } = req.query;
-      if (!id) return res.status(400).json({ error: "Missing ID" });
+      if (!id) return res.status(400).json({ error: 'Missing ID' });
       await db.collection('books').doc(id.toString()).delete();
       return res.status(200).json({ success: true, deleted: 1 });
     } catch (error) {
@@ -81,4 +68,4 @@ export default async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method Not Allowed' });
-}
+};

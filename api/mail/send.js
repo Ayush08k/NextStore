@@ -1,6 +1,6 @@
-import { db } from '../lib/firebase.js';
+const { db } = require('../../lib/firebase');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 
@@ -18,20 +18,14 @@ export default async function handler(req, res) {
       if (!lastDoc.empty) nextId = parseInt(lastDoc.docs[0].id) + 1;
 
       await db.collection('messages').doc(nextId.toString()).set({
-        name,
-        email,
-        subject: subject || 'General Inquiry',
-        message
+        name, email, subject: subject || 'General Inquiry', message
       });
 
-      return res.status(200).json({
-        success: true,
-        message: 'Your message has been sent successfully! (Saved to DB)'
-      });
+      return res.status(200).json({ success: true, message: 'Your message has been sent successfully!' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   }
 
   return res.status(405).json({ error: 'Method Not Allowed' });
-}
+};
