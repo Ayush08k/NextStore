@@ -104,13 +104,80 @@ export const initDb = () => {
       )
     `);
 
-    // Seed Data if products is empty
+    // Re-seed Kota, Jaipur & Gurugram Schools and Books
+    db.run('DELETE FROM books');
+    db.run('DELETE FROM schools');
+
+    console.log('Seeding Kota, Jaipur, and Gurugram Schools & Books...');
+
+    const schoolsSeed = [
+      // KOTA SCHOOLS
+      ['Kota', 'Shiv Jyoti Convent School', 'Rathankhedi, Kota, Rajasthan'],
+      ['Kota', 'Modern School Kota', 'Dadabari, Kota, Rajasthan'],
+      ['Kota', 'Shiv Jyoti International School', 'Shrinath Puram, Kota, Rajasthan'],
+      ['Kota', 'Vidhyanjali Academy', 'Mahaveer Nagar 3, Kota, Rajasthan'],
+      ['Kota', 'Saint James School', 'Talwandi, Kota, Rajasthan'],
+      ['Kota', 'STAIRS SCHOOL OF EXCELLENCE', 'Kunhari, Kota, Rajasthan'],
+      ['Kota', 'New Model Senior Secondary School', 'Vigyan Nagar, Kota, Rajasthan'],
+
+      // JAIPUR SCHOOLS
+      ['Jaipur', 'Narayana eTechno School', 'Pratap Nagar, Jaipur, Rajasthan'],
+      ['Jaipur', 'ORCHIDS The International School', 'Sirsi Road, Jaipur, Rajasthan'],
+      ['Jaipur', 'Banyan Tree School', 'Sector 10, Malviya Nagar, Jaipur, Rajasthan'],
+      ['Jaipur', "St. Xavier's School", 'C-Scheme, Bhagwan Das Road, Jaipur, Rajasthan'],
+      ['Jaipur', 'Gyan Vihar School Jaipur', 'Jagatpura, Jaipur, Rajasthan'],
+      ['Jaipur', 'Subodh Public School', 'Rambagh Circle, Jaipur, Rajasthan'],
+      ['Jaipur', 'Jayshree Periwal Global School', 'Jagatpura, Jaipur, Rajasthan'],
+      ['Jaipur', 'Sanskar School', 'Vishwamitra Marg, Sirsi Road, Jaipur, Rajasthan'],
+      ['Jaipur', 'Mahaveer Public School', 'Vardhman Path, Jaipur, Rajasthan'],
+      ['Jaipur', 'The Palace School', 'City Palace Complex, Jaleb Chowk, Jaipur, Rajasthan'],
+      ['Jaipur', 'ASIAN PUBLIC SCHOOL', 'Vaishali Nagar, Jaipur, Rajasthan'],
+
+      // GURUGRAM SCHOOLS
+      ['Gurugram', 'Salwan Public School', 'Sector 15 Part 2, Gurugram, Haryana'],
+      ['Gurugram', 'St. Xavier High School', 'Sector 49, Golf Course Ext Rd, Gurugram, Haryana'],
+      ['Gurugram', 'Open Sky School', 'Sector 5, Gurugram, Haryana'],
+      ['Gurugram', 'Ajanta Public School', 'Sector 31, Gurugram, Haryana'],
+      ['Gurugram', "St. Crispin's Senior Secondary School", 'New Railway Rd, Gurugram, Haryana'],
+      ['Gurugram', 'SCR Public School', 'Sheetla Mata Rd, Gurugram, Haryana'],
+      ['Gurugram', 'Ryan International School', 'Sector 40, Gurugram, Haryana']
+    ];
+
+    const schoolStmt = db.prepare(`INSERT INTO schools (city, name, address) VALUES (?, ?, ?)`);
+    schoolsSeed.forEach(s => schoolStmt.run(s));
+    schoolStmt.finalize();
+
+    // Seed Prescribed Book Sets for all schools across Classes 1 to 10
+    db.all('SELECT id, name FROM schools', [], (err, schoolRows) => {
+      if (err || !schoolRows) return;
+
+      const bookStmt = db.prepare(`INSERT INTO books (school_id, class_grade, subject, book_title, publisher, price) VALUES (?, ?, ?, ?, ?, ?)`);
+      const classes = ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'];
+
+      schoolRows.forEach((school) => {
+        classes.forEach((cls) => {
+          const classNum = parseInt(cls.replace('Class ', ''));
+          
+          bookStmt.run([school.id, cls, 'Mathematics', `NCERT Mathematics ${cls}`, 'NCERT / CBSE', 15.00 + classNum * 1.5]);
+          bookStmt.run([school.id, cls, 'Science', `Integrated Science & Environment ${cls}`, 'Oxford University Press', 18.00 + classNum * 1.2]);
+          bookStmt.run([school.id, cls, 'English', `English Grammar & Reader ${cls}`, 'Cambridge Press', 14.00 + classNum * 1.0]);
+          bookStmt.run([school.id, cls, 'Hindi', `Hindi Vyakaran & Sparsh ${cls}`, 'NCERT', 12.00 + classNum * 1.0]);
+          bookStmt.run([school.id, cls, 'Social Science', `Our Past & Geography ${cls}`, 'Pearson', 16.50 + classNum * 1.3]);
+
+          if (classNum >= 6) {
+            bookStmt.run([school.id, cls, 'Computer Science', `Foundation of IT & AI ${cls}`, 'Kips Publishing', 22.00]);
+          }
+        });
+      });
+
+      bookStmt.finalize();
+      console.log('Successfully seeded Kota, Jaipur, and Gurugram schools and book sets!');
+    });
+
+    // Seed Products if empty
     db.get('SELECT COUNT(*) AS count FROM products', (err, row) => {
       if (err) return;
       if (row.count === 0) {
-        console.log('Seeding initial NextStore database items...');
-
-        // 1. Seed Products (Matching image & SRS categories)
         const productsSeed = [
           ['Smart Watch Series 5', 'Accessories', 89.99, 120.00, 4.9, 128, 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80', 1, 'Best Seller', 'Fitness smartwatch with heart monitor and GPS.'],
           ['Wireless Headphones', 'Electronics', 59.99, 85.00, 4.7, 94, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', 1, 'Popular', 'Over-ear active noise canceling wireless headphones.'],
@@ -128,34 +195,13 @@ export const initDb = () => {
         `);
         productsSeed.forEach(p => prodStmt.run(p));
         prodStmt.finalize();
+      }
+    });
 
-        // 2. Seed Schools & Books
-        const schoolsSeed = [
-          ['New York', 'Greenwood High School', '120 Park Ave, New York'],
-          ['New York', 'St. Xavier International Academy', '455 5th Ave, New York'],
-          ['London', 'St. Jude Grammar School', '88 Oxford St, London'],
-          ['Mumbai', 'Delhi Public School (DPS)', 'Sector 12, RK Puram']
-        ];
-
-        const schoolStmt = db.prepare(`INSERT INTO schools (city, name, address) VALUES (?, ?, ?)`);
-        schoolsSeed.forEach(s => schoolStmt.run(s));
-        schoolStmt.finalize();
-
-        // Books for School 1 (Greenwood High)
-        const booksSeed = [
-          [1, 'Class 5', 'Mathematics', 'Comprehensive Mathematics Grade 5', 'Pearson', 18.50],
-          [1, 'Class 5', 'Science', 'Exploring Physical Science Class 5', 'Oxford University Press', 22.00],
-          [1, 'Class 5', 'English', 'English Grammar & Composition Book 5', 'Cambridge Press', 15.00],
-          [1, 'Class 5', 'Social Studies', 'Our World & History Grade 5', 'McGraw Hill', 19.99],
-          [1, 'Class 8', 'Mathematics', 'Advanced Algebra & Geometry 8', 'Pearson', 25.00],
-          [1, 'Class 8', 'Science', 'Integrated Chemistry & Physics 8', 'Oxford', 28.00]
-        ];
-
-        const bookStmt = db.prepare(`INSERT INTO books (school_id, class_grade, subject, book_title, publisher, price) VALUES (?, ?, ?, ?, ?, ?)`);
-        booksSeed.forEach(b => bookStmt.run(b));
-        bookStmt.finalize();
-
-        // 3. Seed Coaches
+    // Seed Coaches if empty
+    db.get('SELECT COUNT(*) AS count FROM coaches', (err, row) => {
+      if (err) return;
+      if (row.count === 0) {
         const coachesSeed = [
           ['David Beckham', 'Football', 'Tactical Forward & Free-Kicks', 12, 45.00, 4.95, 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=500&q=80', '09:00 AM, 11:00 AM, 04:00 PM'],
           ['Serena Williams', 'Tennis', 'Power Serve & Baseline Mastery', 15, 60.00, 5.0, 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80', '08:00 AM, 10:00 AM, 05:00 PM'],
