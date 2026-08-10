@@ -20,13 +20,12 @@ export const SpecialOffer = () => {
         </div>
 
         <div className="offer-img-wrap">
-          <img
-            src="/images/promo_banner.png"
-            alt="Up to 50% Off Special Offer"
-            onError={(e) => {
-              e.target.src = "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&q=80";
-            }}
-          />
+          <div className="offer-img-wrap-box">
+            <img
+              src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&q=80"
+              alt="Up to 50% Off Special Offer"
+            />
+          </div>
         </div>
       </div>
     </section>

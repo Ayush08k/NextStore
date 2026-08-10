@@ -246,9 +246,9 @@ export const OrdersPage = () => {
                     <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f0f0f0' }}>
                       <div>
                         <div style={{ fontWeight: 700, fontSize: '14px' }}>{item.name}</div>
-                        <div style={{ fontSize: '12px', color: '#6b7280' }}>Qty: {item.quantity} × ${parseFloat(item.price).toFixed(2)}</div>
+                        <div style={{ fontSize: '12px', color: '#6b7280' }}>Qty: {item.quantity} × ₹{parseFloat(item.price).toFixed(2)}</div>
                       </div>
-                      <span style={{ fontWeight: 800, fontSize: '14px' }}>${(item.price * item.quantity).toFixed(2)}</span>
+                      <span style={{ fontWeight: 800, fontSize: '14px' }}>₹{(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                   ))}
                 </div>
@@ -256,7 +256,7 @@ export const OrdersPage = () => {
                 <div style={{ background: '#ffffff', padding: '16px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', color: '#6b7280' }}>
                     <span>Subtotal:</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span>₹{cartTotal.toFixed(2)}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', color: '#6b7280' }}>
                     <span>Doorstep Shipping:</span>
@@ -265,7 +265,7 @@ export const OrdersPage = () => {
                   <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '10px 0' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 800 }}>
                     <span>Total Amount:</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span>₹{cartTotal.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

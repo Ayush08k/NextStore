@@ -117,7 +117,7 @@ export const DressPage = () => {
               <h3 style={{ fontSize: '18px', fontWeight: 700, marginTop: '8px' }}>{uniform.name}</h3>
               <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 10px 0' }}>{uniform.description}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '18px', fontWeight: 800 }}>${uniform.price.toFixed(2)}</span>
+                <span style={{ fontSize: '18px', fontWeight: 800 }}>₹{uniform.price.toFixed(2)}</span>
                 <button
                   className="btn-primary-green"
                   style={{ padding: '8px 16px', fontSize: '13px' }}

@@ -15,8 +15,6 @@ export const Categories = () => {
     { name: 'Customized Bags & Kits', section: 'Stationary', icon: <ShoppingBag size={34} color="#89a164" /> },
     { name: 'Art & Craft Kits', section: 'Stationary', icon: <Palette size={34} color="#6c804b" /> },
     { name: 'Calculators & Math Kits', section: 'Stationary', icon: <Calculator size={34} color="#5a6d3c" /> },
-    { name: 'Lab & Experiment Kits', section: 'Stationary', icon: <FlaskConical size={34} color="#748c54" /> },
-    { name: 'Educational Electronics', section: 'Stationary', icon: <Cpu size={34} color="#4a5d30" /> },
   ];
 
   const handleScroll = (direction) => {
@@ -32,10 +30,11 @@ export const Categories = () => {
         <h2 className="section-title">Shop by Categories</h2>
       </div>
 
-      <div className="products-slider-wrap" style={{ position: 'relative' }}>
+      <div className="products-slider-wrap" style={{ position: 'relative', padding: '0 36px' }}>
         {/* Left Scroll Button */}
         <button
-          className="side-slide-btn left"
+          className="side-slide-btn"
+          style={{ left: 0, zIndex: 10 }}
           onClick={() => handleScroll('left')}
           title="Scroll Left"
           aria-label="Scroll Left"
@@ -52,7 +51,7 @@ export const Categories = () => {
             gap: '24px',
             overflowX: 'auto',
             scrollBehavior: 'smooth',
-            padding: '12px 6px 20px 6px',
+            padding: '12px 4px 20px 4px',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'
           }}
@@ -74,7 +73,8 @@ export const Categories = () => {
 
         {/* Right Scroll Button */}
         <button
-          className="side-slide-btn right"
+          className="side-slide-btn"
+          style={{ right: 0, zIndex: 10 }}
           onClick={() => handleScroll('right')}
           title="Scroll Right"
           aria-label="Scroll Right"

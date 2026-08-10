@@ -124,7 +124,7 @@ app.delete('/api/schools/:id', (req, res) => {
 });
 
 app.get('/api/books', (req, res) => {
-  const { school_id, class_grade } = req.query;
+  const { school_id, class_grade, board } = req.query;
   let sql = 'SELECT b.*, s.name as school_name, s.city FROM books b JOIN schools s ON b.school_id = s.id';
   const params = [];
   const conditions = [];
@@ -136,6 +136,10 @@ app.get('/api/books', (req, res) => {
   if (class_grade) {
     conditions.push('b.class_grade = ?');
     params.push(class_grade);
+  }
+  if (board) {
+    conditions.push('b.board = ?');
+    params.push(board);
   }
 
   if (conditions.length > 0) {
@@ -245,7 +249,7 @@ app.post('/api/orders', async (req, res) => {
             <p>Your order <strong>#${orderId}</strong> has been placed successfully and is being processed for home delivery.</p>
             <h3>Delivery Address:</h3>
             <p>${address}, ${city}, ${state} - ${pincode}<br>Contact: ${phone}</p>
-            <h3>Total Paid: $${parseFloat(total_amount || 0).toFixed(2)}</h3>
+            <h3>Total Paid: ₹${parseFloat(total_amount || 0).toFixed(2)}</h3>
             <hr style="border: none; border-top: 1px solid #eeeeee;">
             <p style="color: #777; font-size: 12px;">NextStore Educational Supplies & Coaching Platform</p>
           </div>

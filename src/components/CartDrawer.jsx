@@ -44,7 +44,7 @@ export const CartDrawer = () => {
                 <img src={item.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&q=80'} alt={item.name} className="cart-item-img" />
                 <div className="cart-item-details">
                   <div className="cart-item-title">{item.name}</div>
-                  <div className="cart-item-price">${parseFloat(item.price).toFixed(2)}</div>
+                  <div className="cart-item-price">₹{parseFloat(item.price).toFixed(2)}</div>
                   <div className="qty-control">
                     <button className="qty-btn" onClick={() => updateQuantity(item.id, -1)}>
                       <Minus size={12} />
@@ -70,7 +70,7 @@ export const CartDrawer = () => {
           <div className="cart-footer">
             <div className="cart-total-row">
               <span>Total:</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>₹{cartTotal.toFixed(2)}</span>
             </div>
             <button className="checkout-btn" onClick={handleCheckoutClick}>
               Proceed to Delivery Checkout <ArrowRight size={16} style={{ display: 'inline', marginLeft: '6px' }} />

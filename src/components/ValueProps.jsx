@@ -11,7 +11,7 @@ export const ValueProps = () => {
           </div>
           <div>
             <h4 className="vp-title">Free Shipping</h4>
-            <p className="vp-desc">On orders over $50</p>
+            <p className="vp-desc">On orders over ₹499</p>
           </div>
         </div>
 

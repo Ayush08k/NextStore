@@ -101,7 +101,7 @@ export const ExtraCurricularPage = () => {
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                <span style={{ fontSize: '18px', fontWeight: 800 }}>${parseFloat(coach.hourly_rate).toFixed(2)} / hr</span>
+                <span style={{ fontSize: '18px', fontWeight: 800 }}>₹{parseFloat(coach.hourly_rate).toFixed(2)} / hr</span>
                 <button
                   className="btn-primary-green"
                   style={{ padding: '8px 16px', fontSize: '13px' }}
@@ -125,7 +125,7 @@ export const ExtraCurricularPage = () => {
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <h3 style={{ fontSize: '20px', marginBottom: '6px' }}>Book Session with {selectedCoach.name}</h3>
             <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '20px' }}>
-              Sport: <strong>{selectedCoach.sport}</strong> | Rate: <strong>${selectedCoach.hourly_rate}/hr</strong>
+              Sport: <strong>{selectedCoach.sport}</strong> | Rate: <strong>₹{selectedCoach.hourly_rate}/hr</strong>
             </p>
 
             <form onSubmit={handleBookSession}>
@@ -159,7 +159,7 @@ export const ExtraCurricularPage = () => {
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
                 <button type="submit" className="btn-primary-green" style={{ flex: 1 }}>
-                  Confirm Booking (${selectedCoach.hourly_rate})
+                  Confirm Booking (₹{selectedCoach.hourly_rate})
                 </button>
                 <button
                   type="button"
