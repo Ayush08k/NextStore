@@ -134,7 +134,7 @@ a {
 .nav-pills {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 12px;
   list-style: none;
   background: transparent;
   padding: 0;
@@ -143,10 +143,10 @@ a {
 
 .nav-pill-item {
   font-weight: 500;
-  font-size: 13px;
+  font-size: 13.5px;
   color: #555d66;
-  padding: 5px 9px;
-  border-radius: 16px;
+  padding: 6px 14px;
+  border-radius: 18px;
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
