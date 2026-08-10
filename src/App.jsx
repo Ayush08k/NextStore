@@ -11,6 +11,7 @@ import { ExtraCurricularPage } from './pages/ExtraCurricularPage';
 import { SportsPage } from './pages/SportsPage';
 import { StationaryPage } from './pages/StationaryPage';
 import { ContactPage } from './pages/ContactPage';
+import { OrdersPage } from './pages/OrdersPage';
 import { AdminPage } from './pages/AdminPage';
 
 const AppContent = () => {
@@ -24,6 +25,7 @@ const AppContent = () => {
         return <BooksPage />;
       case 'Dress':
         return <DressPage />;
+      case 'Personal Coaches':
       case 'Personal coatches':
       case 'Extra ciriculam activity':
         return <ExtraCurricularPage />;
@@ -31,6 +33,8 @@ const AppContent = () => {
         return <SportsPage />;
       case 'Stationary':
         return <StationaryPage />;
+      case 'Orders':
+        return <OrdersPage />;
       case 'Contact':
         return <ContactPage />;
       case 'Admin':
@@ -43,7 +47,9 @@ const AppContent = () => {
   return (
     <div className="app-shell">
       <Navbar />
-      {renderSection()}
+      <div key={activeSection} className="page-transition-wrapper">
+        {renderSection()}
+      </div>
       <CartDrawer />
       <Footer />
     </div>

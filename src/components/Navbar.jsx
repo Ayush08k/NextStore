@@ -12,9 +12,9 @@ export const Navbar = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        setIsVisible(false); // Scrolling down -> hide navbar
+        setIsVisible(false); // Hide on scroll down
       } else {
-        setIsVisible(true);  // Scrolling up -> show navbar
+        setIsVisible(true);  // Show on scroll up
       }
       setLastScrollY(currentScrollY);
     };
@@ -27,9 +27,10 @@ export const Navbar = () => {
     { name: 'Home', id: 'Home' },
     { name: 'Books', id: 'Books' },
     { name: 'Dress', id: 'Dress' },
-    { name: 'Personal coatches', id: 'Personal coatches' },
+    { name: 'Personal Coaches', id: 'Personal Coaches' },
     { name: 'Sports', id: 'Sports' },
     { name: 'Stationary', id: 'Stationary' },
+    { name: 'Orders', id: 'Orders' },
     { name: 'Contact', id: 'Contact' },
   ];
 
