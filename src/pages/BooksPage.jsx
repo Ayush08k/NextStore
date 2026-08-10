@@ -224,6 +224,28 @@ export const BooksPage = () => {
     }
   }, [selectedSchoolId, selectedClass, selectedBoard]);
 
+  // Helper: return the boards a given school offers
+  const getSchoolBoards = (school) => {
+    if (!school) return ['CBSE'];
+    const n = school.name.toLowerCase();
+    if (n.includes('stairs')) return ['ICSE'];
+    if (n.includes('asian') || n.includes('new model')) return ['RBSE'];
+    if (n.includes('palace')) return ['CBSE', 'RBSE'];
+    return ['CBSE'];
+  };
+
+  const selectedSchoolObj = schools.find((s) => s.id === parseInt(selectedSchoolId));
+  const availableBoards = getSchoolBoards(selectedSchoolObj);
+
+  // Auto-select the correct board whenever school changes
+  useEffect(() => {
+    const boards = getSchoolBoards(selectedSchoolObj);
+    if (!boards.includes(selectedBoard)) {
+      setSelectedBoard(boards[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSchoolId, schools]);
+
   const handleAddFullKit = () => {
     if (books.length === 0) return;
     const totalKitPrice = books.reduce((sum, b) => sum + b.price, 0);
@@ -254,13 +276,6 @@ export const BooksPage = () => {
     setTimeout(() => setKitAddedMsg(''), 4000);
   };
 
-  const selectedSchoolObj = schools.find((s) => s.id === parseInt(selectedSchoolId));
-  const isRbseSchool = selectedSchoolObj && (
-    selectedSchoolObj.name.toLowerCase().includes('new model') ||
-    selectedSchoolObj.name.toLowerCase().includes('palace') ||
-    selectedSchoolObj.name.toLowerCase().includes('asian')
-  );
-  const isIcseSchool = selectedSchoolObj && selectedSchoolObj.name.toLowerCase().includes('stairs');
 
   return (
     <div className="container" style={{ padding: '40px 20px' }}>
@@ -324,42 +339,31 @@ export const BooksPage = () => {
           </div>
         </div>
 
-        {/* Board Selection Tab Bar */}
+        {/* Board Selection Tab Bar — shows ONLY the boards available for the selected school */}
         <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <div style={{ fontSize: '14px', fontWeight: 700, color: '#374151', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Compass size={18} color="#6c804b" /> Select Educational Board Column:
+            <Compass size={18} color="#6c804b" /> Board Affiliation:
           </div>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <button
-              className={selectedBoard === 'CBSE' ? 'btn-primary-green' : 'btn-outline-grey'}
-              style={{ borderRadius: '20px', padding: '8px 20px', fontSize: '13px' }}
-              onClick={() => setSelectedBoard('CBSE')}
-            >
-              For CBSE Board
-            </button>
-            <button
-              className={selectedBoard === 'RBSE' ? 'btn-primary-green' : 'btn-outline-grey'}
-              style={{ borderRadius: '20px', padding: '8px 20px', fontSize: '13px' }}
-              onClick={() => setSelectedBoard('RBSE')}
-            >
-              For RBSE Board (राजस्थान बोर्ड)
-            </button>
-            <button
-              className={selectedBoard === 'ICSE' ? 'btn-primary-green' : 'btn-outline-grey'}
-              style={{ borderRadius: '20px', padding: '8px 20px', fontSize: '13px' }}
-              onClick={() => setSelectedBoard('ICSE')}
-            >
-              For ICSE Board
-            </button>
+            {availableBoards.map((board) => (
+              <button
+                key={board}
+                className={selectedBoard === board ? 'btn-primary-green' : 'btn-outline-grey'}
+                style={{ borderRadius: '20px', padding: '8px 20px', fontSize: '13px' }}
+                onClick={() => setSelectedBoard(board)}
+              >
+                {board === 'CBSE' ? 'CBSE Board' : board === 'RBSE' ? 'RBSE Board (राजस्थान बोर्ड)' : 'ICSE Board'}
+              </button>
+            ))}
           </div>
-          {isRbseSchool && (
+          {availableBoards.length > 1 && (
             <span style={{ fontSize: '12px', background: '#fef3c7', color: '#92400e', padding: '4px 10px', borderRadius: '12px', fontWeight: 700 }}>
-              ✨ {selectedSchoolObj.name} offers RBSE Curriculum
+              ✨ {selectedSchoolObj?.name} offers both CBSE & RBSE Curriculum
             </span>
           )}
-          {isIcseSchool && (
+          {availableBoards.includes('ICSE') && (
             <span style={{ fontSize: '12px', background: '#e0f2fe', color: '#075985', padding: '4px 10px', borderRadius: '12px', fontWeight: 700 }}>
-              📘 STAIRS School of Excellence follows ICSE Board
+              📘 STAIRS School of Excellence — ICSE Board
             </span>
           )}
         </div>

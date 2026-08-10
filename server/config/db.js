@@ -65,6 +65,25 @@ export const initDb = () => {
       )
     `);
 
+    // Uniforms Table
+    db.run(`DROP TABLE IF EXISTS uniforms`);
+    db.run(`
+      CREATE TABLE uniforms (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        school_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        dress_type TEXT NOT NULL,
+        gender TEXT NOT NULL,
+        applicable_classes TEXT,
+        price REAL NOT NULL,
+        price_range TEXT,
+        description TEXT,
+        image TEXT,
+        sort_order INTEGER DEFAULT 99,
+        FOREIGN KEY (school_id) REFERENCES schools (id) ON DELETE CASCADE
+      )
+    `);
+
     // Coaches Table
     db.run(`
       CREATE TABLE IF NOT EXISTS coaches (
@@ -275,6 +294,43 @@ export const initDb = () => {
       });
 
       bookStmt.finalize();
+
+      // Seed Uniforms for every school
+      const uniformStmt = db.prepare(`
+        INSERT INTO uniforms (school_id, name, dress_type, gender, applicable_classes, price, price_range, description, image, sort_order)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+
+      const uniformCatalog = [
+        // name, dress_type, gender, applicable_classes, price, price_range, description, image, sort_order
+        ['Suit Salwar (Class 8–10)', 'Suit Salwar', 'Girls', 'Class 8, Class 9, Class 10', 650, '₹550 – ₹750', 'Full-sleeve suit salwar in school colors, soft cotton blend.', null, 1],
+        ['Suit Salwar (Class 1–7)', 'Suit Salwar', 'Girls', 'Class 1, Class 2, Class 3, Class 4, Class 5, Class 6, Class 7', 580, '₹480 – ₹680', 'Comfortable cotton suit salwar for junior classes.', null, 2],
+        ['Skirt (Girls)', 'Skirt', 'Girls', 'Class 1–10', 320, '₹270 – ₹380', 'Pleated school skirt in school uniform color.', null, 3],
+        ['White Suit & Salwar', 'White Suit Salwar', 'Girls', 'All Classes', 620, '₹520 – ₹720', 'All-white cotton suit salwar for special occasions & PT days.', null, 4],
+        ['White Skirt', 'White Skirt', 'Girls', 'All Classes', 290, '₹240 – ₹340', 'All-white pleated skirt for PT / assembly days.', null, 5],
+        ['Shirt (Boys & Girls)', 'Shirt', 'Unisex', 'All Classes', 280, '₹230 – ₹330', 'Full-sleeve school shirt in school uniform color.', null, 6],
+        ['White Shirt', 'White Shirt', 'Unisex', 'All Classes', 260, '₹210 – ₹310', 'Crisp white cotton school shirt for PT / formal days.', null, 7],
+        ['White T-Shirt', 'White T-Shirt', 'Unisex', 'All Classes', 200, '₹160 – ₹240', 'Round-neck white cotton T-shirt for PE / sports days.', null, 8],
+        ['Boys Pant', 'Boys Pant', 'Boys', 'All Classes', 380, '₹320 – ₹440', 'Regular fit school trousers in school uniform color.', null, 9],
+        ['White Pant', 'White Pant', 'Boys', 'All Classes', 350, '₹290 – ₹410', 'All-white school trouser for PT / special occasion days.', null, 10],
+        ['Half Pant (Boys)', 'Half Pant', 'Boys', 'Class 1–5', 260, '₹210 – ₹310', 'School half-pant in uniform color for primary classes.', null, 11],
+        ['White Half Pant', 'White Half Pant', 'Boys', 'Class 1–5', 240, '₹190 – ₹290', 'All-white half-pant for PT / sports.', null, 12],
+        ['PE / Sports Tracksuit (Jacket + Pant)', 'Tracksuit', 'Unisex', 'All Classes', 920, '₹800 – ₹1,050', 'Breathable polyester tracksuit jacket and pant set for PE/sports.', null, 13],
+        ['Sports Shorts', 'Sports Shorts', 'Unisex', 'All Classes', 220, '₹180 – ₹260', 'Lightweight dry-fit sports shorts for PE and outdoor activity.', null, 14],
+        ['Winter Blazer / Jacket', 'Blazer', 'Unisex', 'All Classes', 1100, '₹950 – ₹1,300', 'Wool-blend school blazer with official school crest for winter.', null, 15],
+        ['School Tie', 'Tie', 'Unisex', 'Class 5–10', 150, '₹120 – ₹180', 'Striped school tie in official school colors.', null, 16],
+        ['School Belt', 'Belt', 'Unisex', 'All Classes', 80, '₹60 – ₹100', 'Black leather school belt with school logo buckle.', null, 17],
+        ['School Socks (Pack of 3 Pairs)', 'Socks', 'Unisex', 'All Classes', 120, '₹90 – ₹150', 'White cotton school socks, anti-skid reinforced toe.', null, 18],
+        ['School Shoes', 'Shoes', 'Unisex', 'All Classes', 750, '₹600 – ₹900', 'Durable black school shoes with cushioned sole.', null, 19],
+      ];
+
+      schoolRows.forEach(school => {
+        uniformCatalog.forEach(([name, dtype, gender, classes, price, range, desc, img, sortOrder]) => {
+          uniformStmt.run([school.id, name, dtype, gender, classes, price, range, desc, img, sortOrder]);
+        });
+      });
+
+      uniformStmt.finalize();
     });
 
     // Seed Products

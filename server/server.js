@@ -175,7 +175,21 @@ app.delete('/api/books/:id', (req, res) => {
   });
 });
 
-// 3. COACHES API
+// 3. UNIFORMS API
+app.get('/api/uniforms', (req, res) => {
+  const { school_id } = req.query;
+  if (!school_id) return res.json([]);
+  db.all(
+    'SELECT * FROM uniforms WHERE school_id = ? ORDER BY sort_order ASC, id ASC',
+    [school_id],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+});
+
+// 4. COACHES API
 app.get('/api/coaches', (req, res) => {
   const { sport } = req.query;
   let sql = 'SELECT * FROM coaches';
