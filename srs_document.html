@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Software Requirements Specification (SRS) - NextStore</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 15mm 20mm 15mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #2d3748;
+    line-height: 1.6;
+    font-size: 11pt;
+    margin: 0;
+    padding: 0;
+  }
+  .cover-page {
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    text-align: center;
+  }
+  .cover-title {
+    font-size: 32pt;
+    font-weight: 800;
+    color: #1a365d;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .cover-subtitle {
+    font-size: 16pt;
+    color: #4a5568;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .cover-badge {
+    background: #3182ce;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 50px;
+  }
+  .cover-meta {
+    margin-top: 60px;
+    font-size: 10pt;
+    color: #718096;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+    width: 80%;
+  }
+  h1 {
+    font-size: 20pt;
+    color: #1a365d;
+    border-bottom: 2px solid #3182ce;
+    padding-bottom: 6px;
+    margin-top: 30px;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-size: 14pt;
+    color: #2b6cb0;
+    margin-top: 25px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 4px;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 12pt;
+    color: #2d3748;
+    margin-top: 18px;
+    page-break-after: avoid;
+  }
+  p, li {
+    text-align: justify;
+  }
+  ul, ol {
+    padding-left: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e0;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #ebf8ff;
+    color: #2c5282;
+    font-weight: bold;
+  }
+  tr:nth-child(even) {
+    background-color: #f7fafc;
+  }
+  .box {
+    background-color: #f7fafc;
+    border-left: 4px solid #3182ce;
+    padding: 12px 16px;
+    margin: 15px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .toc {
+    page-break-after: always;
+  }
+  .toc-title {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #1a365d;
+    border-bottom: 2px solid #3182ce;
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 11pt;
+  }
+  .toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #cbd5e0;
+    margin: 0 8px 4px 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover Page -->
+<div class="cover-page">
+  <div class="cover-badge">Software Requirements Specification</div>
+  <div class="cover-title">NextStore</div>
+  <div class="cover-subtitle">Integrated Educational Supplies E-Commerce & Personal Coaching Booking Platform</div>
+  
+  <div style="margin: 30px 0;">
+    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      <circle cx="12" cy="10" r="3"></circle>
+    </svg>
+  </div>
+
+  <div class="cover-meta">
+    <p><strong>Document Version:</strong> 1.0.0</p>
+    <p><strong>Prepared For:</strong> NextStore Product & Development Team</p>
+    <p><strong>Date:</strong> August 2026</p>
+    <p><strong>Standard Compliance:</strong> IEEE Std 830-1998 Specification</p>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <div class="toc-item"><span>1. Introduction</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;1.1 Purpose</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;1.2 Scope</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;1.3 Definitions, Acronyms, and Abbreviations</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;1.4 References</span><span class="toc-dots"></span><span>2</span></div>
+  <div class="toc-item"><span>2. Overall Description</span><span class="toc-dots"></span><span>3</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;2.1 Product Perspective</span><span class="toc-dots"></span><span>3</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;2.2 Product Functions</span><span class="toc-dots"></span><span>3</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;2.3 User Classes and Characteristics</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;2.4 Operating Environment</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;2.5 Design & Implementation Constraints</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-item"><span>3. System Features & Specific Requirements</span><span class="toc-dots"></span><span>5</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;3.1 School & Class Books Selection Module</span><span class="toc-dots"></span><span>5</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;3.2 Extra-Curricular Coaching Booking System</span><span class="toc-dots"></span><span>6</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;3.3 Stationery, Uniforms & Customized Bags Catalog</span><span class="toc-dots"></span><span>7</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;3.4 Advanced Search & Multi-Attribute Filters</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;3.5 Checkout & Home Delivery Address Module</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;3.6 Admin Dashboard (Add & Delete Management)</span><span class="toc-dots"></span><span>9</span></div>
+  <div class="toc-item"><span>4. Non-Functional Requirements</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;4.1 Performance Requirements</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;4.2 Security Requirements</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;4.3 Reliability & Availability</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-item"><span>&nbsp;&nbsp;4.4 Usability & Accessibility</span><span class="toc-dots"></span><span>10</span></div>
+  <div class="toc-item"><span>5. Database & Data Model Overview</span><span class="toc-dots"></span><span>11</span></div>
+</div>
+
+<!-- Section 1 -->
+<h1>1. Introduction</h1>
+
+<h2>1.1 Purpose</h2>
+<p>The purpose of this Software Requirements Specification (SRS) document is to provide a complete, clear, and authoritative description of the functional and non-functional requirements for <strong>NextStore</strong>. This document specifies the operational capabilities, architectural structure, data flow, user interaction models, and delivery workflow required to build the NextStore web application.</p>
+
+<h2>1.2 Scope</h2>
+<p><strong>NextStore</strong> is an all-in-one digital web platform designed for student, parent, and educational commerce. The application features:</p>
+<ul>
+  <li><strong>Curriculum-Based Book Finder:</strong> Enables users to select City, School Name, and Class grade to view and purchase the prescribed school book list.</li>
+  <li><strong>Extra-Curricular Activity & Coach Booking:</strong> Allows users to select sports and book personal coaching sessions.</li>
+  <li><strong>School Supplies & Customization Hub:</strong> Offers stationery, school uniforms, sports equipment, and customized school bags (with student name/logo print).</li>
+  <li><strong>Direct Home Delivery Information Capture:</strong> Captures user contact details (name, phone number, and physical delivery address) for home delivery.</li>
+  <li><strong>Data Management Admin Dashboard:</strong> An administrative panel dedicated exclusively to adding new items (schools, books, products, coaches) and deleting obsolete data records.</li>
+</ul>
+
+<h2>1.3 Definitions, Acronyms, and Abbreviations</h2>
+<table>
+  <tr><th>Term / Acronym</th><th>Definition</th></tr>
+  <tr><td><strong>SRS</strong></td><td>Software Requirements Specification</td></tr>
+  <tr><td><strong>Admin</strong></td><td>Platform Administrator responsible for Adding and Deleting system records</td></tr>
+  <tr><td><strong>Custom Bag Engine</strong></td><td>Interactive module for adding student name and details on school bags</td></tr>
+</table>
+
+<h2>1.4 References</h2>
+<ul>
+  <li>IEEE Standard 830-1998 for Software Requirements Specifications.</li>
+  <li>NextStore System Specification Guidelines.</li>
+</ul>
+
+<!-- Section 2 -->
+<h1>2. Overall Description</h1>
+
+<h2>2.1 Product Perspective</h2>
+<p>NextStore operates as an independent web application, providing an intuitive e-commerce experience for educational supplies and personal sports coaching bookings.</p>
+
+<h2>2.2 Product Functions</h2>
+<ol>
+  <li><strong>Hierarchical Book Selection:</strong> Cascade dropdowns (City &rarr; School &rarr; Class) to view and order prescribed books.</li>
+  <li><strong>Personal Coach Booking:</strong> Select sports activities, view coach profiles, and book session slots.</li>
+  <li><strong>Stationery & Equipment Catalog:</strong> Browse and purchase pens, pencils, uniforms, bags, and sports gear.</li>
+  <li><strong>Customized Bag Engine:</strong> Input student name, class, or logo for bag personalization.</li>
+  <li><strong>Home Delivery Address Entry:</strong> Checkout form gathering full name, contact number, and home delivery address.</li>
+  <li><strong>Add & Delete Admin Panel:</strong> Admin panel for inserting new catalog entries/schools/coaches and deleting existing items.</li>
+</ol>
+
+<h2>2.3 User Classes and Characteristics</h2>
+<table>
+  <tr><th>User Role</th><th>Description & Privileges</th></tr>
+  <tr>
+    <td><strong>Parents / Students (Customers)</strong></td>
+    <td>Browse book lists by school/class, select stationery/uniforms/bags, book coaches, and submit home delivery orders with contact details.</td>
+  </tr>
+  <tr>
+    <td><strong>Store Administrators</strong></td>
+    <td>Access Admin Dashboard to <strong>Add New Data</strong> (schools, book sets, products, coaches) and <strong>Delete Data</strong>.</td>
+  </tr>
+</table>
+
+<h2>2.4 Operating Environment</h2>
+<ul>
+  <li><strong>Client Side:</strong> Cross-browser compatibility across Google Chrome, Safari, Mozilla Firefox, Edge, and mobile web browsers.</li>
+  <li><strong>Server Side:</strong> Node.js / Python application connected to a SQL/NoSQL Database.</li>
+</ul>
+
+<h2>2.5 Design & Implementation Constraints</h2>
+<ul>
+  <li>Responsive mobile-first user interface.</li>
+  <li>Admin panel UI must provide confirmation prompts before executing delete operations.</li>
+</ul>
+
+<!-- Section 3 -->
+<h1>3. System Features & Specific Requirements</h1>
+
+<h2>3.1 School & Class Books Selection Module</h2>
+
+<h3>3.1.1 Functional Requirements</h3>
+<ul>
+  <li><strong>FR-BK-01 (Cascade Selector):</strong> Provide 3 linked dropdown selectors:
+    <ol>
+      <li>City Selection</li>
+      <li>School Name (filtered based on chosen city)</li>
+      <li>Class / Grade (e.g., Nursery to Class 12)</li>
+    </ol>
+  </li>
+  <li><strong>FR-BK-02 (Booklist Display):</strong> Display the exact list of textbooks, notebooks, and reference books prescribed for the selected school and class.</li>
+  <li><strong>FR-BK-03 (Kit Selection):</strong> Option to select the complete class book kit or select individual items.</li>
+</ul>
+
+<h2>3.2 Extra-Curricular Activity & Personal Coach Booking System</h2>
+
+<h3>3.2.1 Functional Requirements</h3>
+<ul>
+  <li><strong>FR-CH-01 (Activity Categories):</strong> Display sports categories (Cricket, Football, Tennis, Swimming, Badminton, Chess, etc.).</li>
+  <li><strong>FR-CH-02 (Coach Information):</strong> Show coach profile, specialization, experience, rates, and rating.</li>
+  <li><strong>FR-CH-03 (Slot Booking):</strong> Select date, time slot, and preferred location for coaching.</li>
+</ul>
+
+<h2>3.3 Stationery, Uniforms & Customized Bags Catalog</h2>
+
+<h3>3.3.1 Functional Requirements</h3>
+<ul>
+  <li><strong>FR-ST-01 (Stationery Catalog):</strong> Browse pens, pencils, notebooks, geometry boxes, and art materials.</li>
+  <li><strong>FR-UN-02 (Uniform Selector):</strong> Filter uniforms by school name, gender, uniform type, and size chart.</li>
+  <li><strong>FR-BG-03 (Customized Bag Studio):</strong> Real-time text preview allowing users to enter student name and select font/style to customize school bags.</li>
+  <li><strong>FR-EQ-04 (Sports Gear):</strong> Catalog of sports equipment and protective gear.</li>
+</ul>
+
+<h2>3.4 Advanced Search & Multi-Attribute Filters</h2>
+<ul>
+  <li><strong>FR-SR-01 (Search Bar):</strong> Keyword search across books, stationery, uniforms, bags, and sports gear.</li>
+  <li><strong>FR-SR-02 (Filters):</strong> Filter products by price, brand, category, and school name.</li>
+</ul>
+
+<h2>3.5 Checkout & Home Delivery Address Module</h2>
+
+<h3>3.5.1 Functional Requirements</h3>
+<ul>
+  <li><strong>FR-DL-01 (Delivery Contact Information Capture):</strong> The checkout form shall collect:
+    <ul>
+      <li>Full Recipient Name</li>
+      <li>Primary Mobile Contact Number & Alternate Phone Number</li>
+      <li>Complete Home Delivery Address (House/Flat No, Building/Street, Landmark)</li>
+      <li>City, State, and Pincode</li>
+      <li>Delivery Instructions / Address Notes</li>
+    </ul>
+  </li>
+  <li><strong>FR-DL-02 (Home Delivery Order Submission):</strong> Submit order details and recipient contact address for doorstep delivery.</li>
+</ul>
+
+<h2>3.6 Admin Dashboard (Add & Delete Management)</h2>
+<p>The Admin Dashboard provides management capabilities strictly focused on <strong>Adding New Data</strong> and <strong>Deleting Existing Data</strong> across all platform modules.</p>
+
+<h3>3.6.1 Functional Requirements</h3>
+<table>
+  <tr><th>Module</th><th>Add Data Functionality</th><th>Delete Data Functionality</th></tr>
+  <tr>
+    <td><strong>School & Book Management</strong></td>
+    <td>Add new Cities, Schools, Class levels, and associate Book Lists to specific classes.</td>
+    <td>Delete obsolete Cities, Schools, Class mappings, or individual Book entries.</td>
+  </tr>
+  <tr>
+    <td><strong>Coach & Activity Management</strong></td>
+    <td>Add new sports categories and register new Coach profiles with rates and slots.</td>
+    <td>Delete inactive Coaches or removed Sports categories.</td>
+  </tr>
+  <tr>
+    <td><strong>Stationery & Supplies</strong></td>
+    <td>Add new stationery items (pens, pencils, notebooks) with prices and details.</td>
+    <td>Delete discontinued stationery products.</td>
+  </tr>
+  <tr>
+    <td><strong>Uniforms & Customized Bags</strong></td>
+    <td>Add new Uniform designs/sizes and Bag models available for customization.</td>
+    <td>Delete out-of-stock Uniform sizes or phased-out Bag models.</td>
+  </tr>
+  <tr>
+    <td><strong>Sports Equipment</strong></td>
+    <td>Add new sports gear, equipment items, images, and pricing.</td>
+    <td>Delete obsolete or unavailable sports equipment entries.</td>
+  </tr>
+</table>
+
+<!-- Section 4 -->
+<h1>4. Non-Functional Requirements</h1>
+
+<h2>4.1 Performance Requirements</h2>
+<ul>
+  <li>Page load time under 1.5 seconds.</li>
+  <li>Immediate response for Add and Delete operations in the Admin Panel.</li>
+</ul>
+
+<h2>4.2 Security Requirements</h2>
+<ul>
+  <li>Role-Based Access Control (RBAC) ensuring only authenticated Admins can perform Add/Delete actions.</li>
+  <li>Secure data validation on all form submissions.</li>
+</ul>
+
+<h2>4.3 Reliability & Usability</h2>
+<ul>
+  <li>Confirmation modal dialogs required before performing any permanent Delete operation in the Admin Panel.</li>
+  <li>Simple checkout form for home delivery requests.</li>
+</ul>
+
+<!-- Section 5 -->
+<h1>5. Database Data Model Overview</h1>
+<p>Core entity relations for NextStore:</p>
+
+<div class="box">
+  <ul>
+    <li><strong>User Entity:</strong> UserID, Name, Email, Phone, Role (Customer/Admin)</li>
+    <li><strong>School Entity:</strong> SchoolID, City, SchoolName, Address</li>
+    <li><strong>BookSet Entity:</strong> BookSetID, SchoolID, ClassGrade, BookTitle, Author, Price</li>
+    <li><strong>Product Entity:</strong> ProductID, SKU, Name, Category (Stationery/Uniform/Bag/Sports), Price, Details</li>
+    <li><strong>Coach Entity:</strong> CoachID, Name, SportCategory, Specialization, Rate</li>
+    <li><strong>DeliveryOrder Entity:</strong> OrderID, RecipientName, ContactPhone, FullAddress, City, Pincode, OrderDetails, CreatedAt</li>
+  </ul>
+</div>
+
+<div style="margin-top: 50px; text-align: center; font-size: 10pt; color: #a0aec0; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+  --- End of Software Requirements Specification for NextStore ---
+</div>
+
+</body>
+</html>

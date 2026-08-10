@@ -1,0 +1,117 @@
+import React, { createContext, useState, useEffect } from 'react';
+
+export const ShopContext = createContext();
+
+export const ShopProvider = ({ children }) => {
+  const [activeSection, setActiveSection] = useState('Home');
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState([]);
+  const [coaches, setCoaches] = useState([]);
+
+  // Fetch initial products
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch('/api/products');
+      if (res.ok) {
+        const data = await res.json();
+        setProducts(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch products:', err);
+    }
+  };
+
+  // Fetch initial coaches
+  const fetchCoaches = async () => {
+    try {
+      const res = await fetch('/api/coaches');
+      if (res.ok) {
+        const data = await res.json();
+        setCoaches(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch coaches:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCoaches();
+  }, []);
+
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === product.id && item.name === product.name);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id && item.name === product.name
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+    setIsCartOpen(true);
+  };
+
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const updateQuantity = (id, delta) => {
+    setCart((prev) =>
+      prev
+        .map((item) => {
+          if (item.id === id) {
+            const newQty = item.quantity + delta;
+            return newQty > 0 ? { ...item, quantity: newQty } : null;
+          }
+          return item;
+        })
+        .filter(Boolean)
+    );
+  };
+
+  const toggleWishlist = (id) => {
+    setWishlist((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const clearCart = () => setCart([]);
+
+  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
+  return (
+    <ShopContext.Provider
+      value={{
+        activeSection,
+        setActiveSection,
+        cart,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        isCartOpen,
+        setIsCartOpen,
+        wishlist,
+        toggleWishlist,
+        searchQuery,
+        setSearchQuery,
+        products,
+        setProducts,
+        fetchProducts,
+        coaches,
+        fetchCoaches,
+        cartCount,
+        cartTotal
+      }}
+    >
+      {children}
+    </ShopContext.Provider>
+  );
+};
