@@ -120,7 +120,7 @@ export const ExtraCurricularPage = () => {
               </div>
             </div>
           </div>
-        ))
+          ))
         )}
       </div>
 
