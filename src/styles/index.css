@@ -373,7 +373,7 @@ a {
 }
 
 .btn-primary-green {
-  background: var(--primary-green);
+  background: linear-gradient(135deg, #6c804b 0%, #586a3b 100%);
   color: #ffffff;
   padding: 14px 28px;
   border-radius: var(--radius-sm);
@@ -382,22 +382,70 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(108, 128, 75, 0.25);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(108, 128, 75, 0.28);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary-green::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+  transform: translateX(-100%) rotate(25deg);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-primary-green:hover::before {
+  transform: translateX(100%) rotate(25deg);
 }
 
 .btn-primary-green:hover {
-  background: var(--primary-green-dark);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #586a3b 0%, #44542c 100%);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(108, 128, 75, 0.42);
+}
+
+.btn-primary-green svg {
+  transition: transform 0.25s ease;
+}
+
+.btn-primary-green:hover svg {
+  transform: translateX(4px) scale(1.1);
+}
+
+.btn-primary-green:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 3px 8px rgba(108, 128, 75, 0.2);
 }
 
 .btn-outline-grey {
   background: #ffffff;
   color: var(--text-dark);
-  border: 1px solid #d1d5db;
+  border: 1.5px solid #d1d5db;
   padding: 14px 28px;
   border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-outline-grey:hover {
+  background: #f4f6ee;
+  border-color: #6c804b;
+  color: #4a5c32;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(108, 128, 75, 0.15);
 }
 
 .btn-outline-grey:hover {
@@ -735,20 +783,57 @@ a {
 
 .add-to-cart-btn {
   width: 100%;
-  background: var(--primary-green);
+  background: linear-gradient(135deg, #6c804b 0%, #586a3b 100%);
   color: white;
-  padding: 10px;
+  padding: 10px 16px;
   border-radius: var(--radius-sm);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 13.5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(108, 128, 75, 0.25);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+}
+
+.add-to-cart-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
+  transform: translateX(-100%) rotate(25deg);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.add-to-cart-btn:hover::before {
+  transform: translateX(100%) rotate(25deg);
 }
 
 .add-to-cart-btn:hover {
-  background: var(--primary-green-dark);
+  background: linear-gradient(135deg, #586a3b 0%, #44542c 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(108, 128, 75, 0.38);
+}
+
+.add-to-cart-btn svg {
+  transition: transform 0.25s ease;
+}
+
+.add-to-cart-btn:hover svg {
+  transform: scale(1.18) rotate(-8deg);
+}
+
+.add-to-cart-btn:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 /* Special Offer Banner */
