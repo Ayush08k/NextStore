@@ -41,7 +41,7 @@ export const BoardsWorkedWith = () => {
         <h2 className="section-title">Educational Boards We Work With</h2>
       </div>
 
-      <div className="value-props" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+      <div className="value-props boards-grid">
         {boards.map((board, idx) => (
           <div key={idx} className="vp-item" title={`${board.title} Prescribed Kits Available`}>
             <div className="vp-icon">

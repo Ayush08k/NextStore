@@ -27,6 +27,8 @@ export const ProductGrid = ({ title = "Best Selling Products", filterCategory })
       p.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
+  // Limit to max 10 items for all views on home screen
+  filtered = filtered.slice(0, 10);
 
   const totalCards = filtered.length;
   const maxIndex = Math.max(0, totalCards - MOBILE_VISIBLE);

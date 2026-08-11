@@ -191,14 +191,7 @@ export const Navbar = () => {
                   overflowY: 'auto'
                 }}
               >
-                {/* 1. TYPING WAITING INDICATOR (1.5s Pause) */}
-                {isTypingDebouncing && (
-                  <div style={{ fontSize: '12px', color: '#6c804b', fontWeight: 600, padding: '6px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span className="typing-dot-anim">●</span> Waiting for 1.5s pause to fetch suggestions...
-                  </div>
-                )}
-
-                {/* 2. LIVE MATCHING SUGGESTIONS (Appears after 1.5s pause) */}
+                {/* 1. LIVE MATCHING SUGGESTIONS (Appears after 1.5s pause) */}
                 {!isTypingDebouncing && query.length > 0 && (
                   <div style={{ marginBottom: '14px' }}>
                     <div style={{ fontSize: '11px', fontWeight: 800, color: '#6c804b', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
