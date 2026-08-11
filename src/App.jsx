@@ -40,7 +40,7 @@ const AppContent = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setPhase('idle');
-    }, 420);
+    }, 850);
     return () => clearTimeout(timer);
   }, []);
 
@@ -56,7 +56,7 @@ const AppContent = () => {
 
       const enterTimer = setTimeout(() => {
         setPhase('idle');
-      }, 420);
+      }, 850);
 
       return () => clearTimeout(enterTimer);
     }, 280);
