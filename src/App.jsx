@@ -29,7 +29,7 @@ const sectionComponents = {
 };
 
 const AppContent = () => {
-  const { activeSection } = useContext(ShopContext);
+  const { activeSection, apiError, fetchProducts, fetchCoaches } = useContext(ShopContext);
 
   // Track which section is currently displayed vs the incoming one
   const [displayedSection, setDisplayedSection] = useState(activeSection);
@@ -66,6 +66,32 @@ const AppContent = () => {
   return (
     <div className="app-shell">
       <Navbar />
+      {apiError && (
+        <div style={{
+          background: '#fef2f2',
+          borderBottom: '1px solid #fecaca',
+          color: '#991b1b',
+          padding: '10px 24px',
+          fontSize: '14px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 999,
+        }}>
+          <span>
+            ⚠️ <strong>Backend server is not running.</strong> Data cannot be loaded. Please start it with <code style={{ background: '#fee2e2', padding: '2px 6px', borderRadius: '4px' }}>npm run server</code> in a terminal.
+          </span>
+          <button
+            onClick={() => { fetchProducts(); fetchCoaches(); }}
+            style={{ background: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', padding: '5px 14px', fontSize: '13px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+          >
+            Retry
+          </button>
+        </div>
+      )}
       <div className={`page-transition-wrapper ${animClass}`}>
         <SectionComponent />
       </div>
