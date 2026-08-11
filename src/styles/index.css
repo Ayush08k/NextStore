@@ -1798,3 +1798,34 @@ a {
   }
 }
 
+/* Step Transition Animations for Checkout Flow */
+@keyframes stepSlideNext {
+  0% {
+    opacity: 0;
+    transform: translateX(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes stepSlidePrev {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.step-anim-next {
+  animation: stepSlideNext 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.step-anim-prev {
+  animation: stepSlidePrev 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+

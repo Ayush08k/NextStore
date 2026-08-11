@@ -4,7 +4,33 @@ import { initialProducts, initialCoaches, initialBooks, initialUniforms } from '
 export const ShopContext = createContext();
 
 export const ShopProvider = ({ children }) => {
-  const [activeSection, setActiveSection] = useState('Home');
+  const [activeSection, setActiveSectionState] = useState('Home');
+
+  // Handle browser popstate (Hardware / Software Back Button)
+  useEffect(() => {
+    // Replace initial state with current section
+    window.history.replaceState({ section: 'Home' }, '');
+
+    const handlePopState = (event) => {
+      if (event.state && event.state.section) {
+        setActiveSectionState(event.state.section);
+      } else {
+        setActiveSectionState('Home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const setActiveSection = (section) => {
+    setActiveSectionState((prev) => {
+      if (prev !== section) {
+        window.history.pushState({ section }, '', `#${section}`);
+      }
+      return section;
+    });
+  };
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [wishlist, setWishlist] = useState([]);

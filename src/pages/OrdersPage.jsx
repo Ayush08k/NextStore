@@ -7,6 +7,14 @@ export const OrdersPage = () => {
 
   // 2-Step Checkout Flow: 'summary' (Step 1) -> 'address' (Step 2)
   const [checkoutStep, setCheckoutStep] = useState('summary');
+  const [slideAnimClass, setSlideAnimClass] = useState('step-anim-next');
+
+  const goToStep = (step) => {
+    if (step === checkoutStep) return;
+    if (step === 'address') setSlideAnimClass('step-anim-next');
+    else setSlideAnimClass('step-anim-prev');
+    setCheckoutStep(step);
+  };
 
   const [deliveryData, setDeliveryData] = useState({
     recipient_name: '',
@@ -112,7 +120,7 @@ export const OrdersPage = () => {
           {/* STEP PROGRESS TRACKER */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
             <div
-              onClick={() => setCheckoutStep('summary')}
+              onClick={() => goToStep('summary')}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -123,7 +131,8 @@ export const OrdersPage = () => {
                 color: checkoutStep === 'summary' ? '#ffffff' : '#6b7280',
                 fontWeight: 700,
                 fontSize: '13.5px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'all 0.25s ease'
               }}
             >
               <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: checkoutStep === 'summary' ? '#ffffff' : '#d1d5db', color: checkoutStep === 'summary' ? '#586a3b' : '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 800 }}>
@@ -135,7 +144,7 @@ export const OrdersPage = () => {
             <ArrowRight size={16} color="#9ca3af" />
 
             <div
-              onClick={() => { if (cart.length > 0) setCheckoutStep('address'); }}
+              onClick={() => { if (cart.length > 0) goToStep('address'); }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -147,7 +156,8 @@ export const OrdersPage = () => {
                 fontWeight: 700,
                 fontSize: '13.5px',
                 cursor: cart.length > 0 ? 'pointer' : 'not-allowed',
-                opacity: cart.length > 0 ? 1 : 0.6
+                opacity: cart.length > 0 ? 1 : 0.6,
+                transition: 'all 0.25s ease'
               }}
             >
               <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: checkoutStep === 'address' ? '#ffffff' : '#d1d5db', color: checkoutStep === 'address' ? '#586a3b' : '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 800 }}>
@@ -159,7 +169,7 @@ export const OrdersPage = () => {
 
           {/* STEP 1: ORDER SUMMARY PAGE */}
           {checkoutStep === 'summary' && (
-            <div className="form-card" style={{ background: '#ffffff', padding: '28px', borderRadius: '20px', border: '1px solid #e5e7eb', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
+            <div className={`form-card ${slideAnimClass}`} style={{ background: '#ffffff', padding: '28px', borderRadius: '20px', border: '1px solid #e5e7eb', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', paddingBottom: '14px', borderBottom: '1px solid #f0f0f0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <Package color="#6c804b" size={24} />
@@ -243,7 +253,7 @@ export const OrdersPage = () => {
                   <button
                     className="btn-primary-green"
                     style={{ width: '100%', padding: '14px', borderRadius: '12px', fontSize: '15px', justifyContent: 'center' }}
-                    onClick={() => setCheckoutStep('address')}
+                    onClick={() => goToStep('address')}
                   >
                     Proceed to Delivery Address <ArrowRight size={18} />
                   </button>
@@ -254,7 +264,7 @@ export const OrdersPage = () => {
 
           {/* STEP 2: DELIVERY ADDRESS ENTRY FORM */}
           {checkoutStep === 'address' && (
-            <div className="form-card" style={{ background: '#ffffff', padding: '28px', borderRadius: '20px', border: '1px solid #e5e7eb', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
+            <div className={`form-card ${slideAnimClass}`} style={{ background: '#ffffff', padding: '28px', borderRadius: '20px', border: '1px solid #e5e7eb', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', paddingBottom: '14px', borderBottom: '1px solid #f0f0f0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <Truck color="#6c804b" size={24} />
@@ -265,7 +275,7 @@ export const OrdersPage = () => {
                   type="button"
                   className="btn-outline-grey"
                   style={{ fontSize: '12.5px', padding: '6px 14px', borderRadius: '10px' }}
-                  onClick={() => setCheckoutStep('summary')}
+                  onClick={() => goToStep('summary')}
                 >
                   <ArrowLeft size={14} /> Back to Order
                 </button>
