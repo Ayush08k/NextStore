@@ -1,0 +1,83 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   NEXTSTORE TABLET OPTIMIZATION STYLES (769px to 1024px)
+   - 3 cards per row across store catalog grids
+   - Balanced spacing, clear tap targets, responsive navbar & forms
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* ─── 1. CONTAINER & PADDING ─── */
+  .container {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* ─── 2. TABLET NAVBAR ─── */
+  .redesigned-navbar {
+    padding: 10px 16px !important;
+  }
+
+  .nav-pills {
+    gap: 8px !important;
+  }
+
+  .nav-pill-item {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .search-box-redesigned {
+    width: 170px !important;
+  }
+
+  .search-box-redesigned:focus-within {
+    width: 200px !important;
+  }
+
+  /* ─── 3. TABLET 3 CARDS PER ROW GRID LAYOUT ─── */
+  .store-products-grid,
+  .products-grid,
+  .sports-grid,
+  .stationary-grid,
+  .books-grid,
+  .dress-grid,
+  .search-results-grid,
+  .coaches-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* Exactly 3 cards per row on tablet */
+    gap: 16px !important;
+    margin-bottom: 32px !important;
+  }
+
+  .product-card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .product-img-wrap {
+    height: 125px !important;
+  }
+
+  .product-title {
+    font-size: 13.5px !important;
+    height: 36px !important;
+  }
+
+  .current-price {
+    font-size: 15px !important;
+  }
+
+  /* ─── 4. TABLET BANNERS & FORMS ─── */
+  .grid-2 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+
+  .hero-title {
+    font-size: 36px !important;
+  }
+
+  .cart-modal-window {
+    max-width: 520px !important;
+  }
+}

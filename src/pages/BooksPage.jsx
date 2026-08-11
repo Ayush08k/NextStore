@@ -392,10 +392,11 @@ export const BooksPage = () => {
             </button>
           </div>
 
-          <div className="grid-2" style={{ gap: '20px' }}>
+          <div className="store-products-grid books-grid">
             {books.map((book) => (
               <div
                 key={book.id}
+                className="product-card"
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e5e7eb',

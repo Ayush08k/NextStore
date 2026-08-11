@@ -200,7 +200,7 @@ export const DressPage = () => {
               No items match the selected filter.
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '18px' }}>
+            <div className="store-products-grid dress-grid">
               {filtered.map(uniform => {
                 const gc = GENDER_COLORS[uniform.gender] || GENDER_COLORS['Unisex'];
                 const icon = DRESS_TYPE_ICONS[uniform.dress_type] || '👕';
@@ -209,6 +209,7 @@ export const DressPage = () => {
                 return (
                   <div
                     key={uniform.id}
+                    className="product-card"
                     style={{
                       background: '#ffffff',
                       border: `1.5px solid ${isAdded ? '#6c804b' : '#e5e7eb'}`,

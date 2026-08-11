@@ -62,13 +62,14 @@ export const ExtraCurricularPage = () => {
 
 
       {/* Coaches Grid */}
-      <div className="grid-2" style={{ marginBottom: '40px' }}>
+      <div className="store-products-grid coaches-grid" style={{ marginBottom: '40px' }}>
         {isLoadingCoaches ? (
           <SkeletonLoader type="list" count={4} />
         ) : (
           filteredCoaches.map((coach) => (
             <div
               key={coach.id}
+              className="product-card"
               style={{
                 background: '#ffffff',
                 border: '1px solid #e5e7eb',

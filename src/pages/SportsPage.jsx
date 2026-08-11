@@ -107,13 +107,7 @@ export const SportsPage = () => {
       </div>
 
       {/* Dedicated Full Product Grid (No Arrows, No View All button) */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(275px, 1fr))',
-          gap: '24px'
-        }}
-      >
+      <div className="store-products-grid sports-grid">
         {filteredProducts.map((product) => (
           <div
             key={product.id}

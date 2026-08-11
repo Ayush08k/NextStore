@@ -1,0 +1,233 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   NEXTSTORE MOBILE OPTIMIZATION STYLES (≤ 768px)
+   - 2 cards in total width across ALL product grids & search views
+   - 2.5 rows visible on screen height for optimal browsing
+   - Touch-friendly tap targets & mobile responsive typography/alignment
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ─── 1. GLOBAL LAYOUT & PADDING ─── */
+  .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* ─── 2. NAVBAR & HEADER MOBILE STYLING ─── */
+  .redesigned-navbar {
+    height: auto !important;
+    padding: 8px 12px !important;
+  }
+
+  .navbar-inner {
+    height: auto !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .brand-logo {
+    font-size: 16px !important;
+  }
+
+  .main-nav {
+    order: 3 !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px !important;
+  }
+
+  .main-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-pills {
+    display: flex !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-pill-item {
+    padding: 5px 12px !important;
+    font-size: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .nav-actions {
+    gap: 8px !important;
+  }
+
+  .search-box-redesigned {
+    width: 140px !important;
+    padding: 4px 8px !important;
+  }
+
+  .search-box-redesigned:focus-within {
+    width: 160px !important;
+  }
+
+  .search-box-redesigned input {
+    font-size: 11.5px !important;
+  }
+
+  .cart-action-btn {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+  }
+
+  .cart-btn-text {
+    display: none !important; /* Icon + badge only on small screens for clean header */
+  }
+
+  /* ─── 3. MANDATORY 2 CARDS PER ROW & 2.5 ROWS VISIBLE ON SCREEN ─── */
+  .store-products-grid,
+  .products-grid,
+  .sports-grid,
+  .stationary-grid,
+  .books-grid,
+  .dress-grid,
+  .search-results-grid,
+  .coaches-grid,
+  div[class*="grid-"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Strictly 2 cards in total width */
+    gap: 10px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Product Card Sizing: Calibrated to fit exactly 2.5 rows on screen */
+  .product-card {
+    padding: 8px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    background: #ffffff !important;
+  }
+
+  .product-img-wrap {
+    height: 95px !important; /* Shorter image wrap to ensure 2.5 rows fit vertically */
+    padding: 4px !important;
+    margin-bottom: 6px !important;
+    border-radius: 8px !important;
+  }
+
+  .product-img-wrap img {
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .product-info-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    flex: 1 !important;
+  }
+
+  .product-title {
+    font-size: 11.5px !important;
+    line-height: 1.25 !important;
+    height: 28px !important; /* Max 2 lines height */
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    font-weight: 700 !important;
+  }
+
+  .product-price-row {
+    margin: 2px 0 6px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  .current-price {
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+  }
+
+  .original-price {
+    font-size: 10.5px !important;
+  }
+
+  /* Add to Cart button compact fitting */
+  .add-to-cart-btn,
+  .product-card button {
+    padding: 6px 4px !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+  }
+
+  .cart-qty-control-badge {
+    height: 30px !important;
+    padding: 2px 4px !important;
+  }
+
+  .cart-qty-control-badge span {
+    font-size: 10.5px !important;
+  }
+
+  .cart-qty-control-badge button {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* ─── 4. HERO & BANNER SECTIONS ─── */
+  .hero-section {
+    padding: 24px 0 !important;
+  }
+
+  .hero-title {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero-subtitle {
+    font-size: 13px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .hero-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* ─── 5. FORMS & CUSTOMIZED BAG STUDIO ─── */
+  .form-card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .bag-studio-preview {
+    height: 180px !important;
+    padding: 16px !important;
+  }
+
+  .printed-text-overlay {
+    font-size: 14px !important;
+  }
+
+  /* ─── 6. CART POPUP MODAL ON MOBILE ─── */
+  .cart-modal-window {
+    width: 95% !important;
+    max-height: 90vh !important;
+    border-radius: 18px !important;
+  }
+}

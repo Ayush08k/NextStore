@@ -97,7 +97,7 @@ export const SearchResultsPage = () => {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(275px, 1fr))', gap: '24px' }}>
+        <div className="store-products-grid search-results-grid">
           {filteredResults.map((item) => (
             <div key={item.id} className="product-card">
               <div className="product-img-wrap" style={{ height: '135px' }}>

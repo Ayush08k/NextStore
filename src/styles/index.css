@@ -1,4 +1,5 @@
-@import './mobile/responsive.css';
+@import './mobile/mobile.css';
+@import './tablet/tablet.css';
 
 :root {
   --primary-green: #6c804b;

@@ -137,7 +137,7 @@ export const StationaryPage = () => {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(275px, 1fr))', gap: '20px', marginBottom: '50px' }}>
+        <div className="store-products-grid stationary-grid">
           {filteredProducts.map((item) => {
             const isBagItem = item.category === 'Custom Bags' || item.name.toLowerCase().includes('bag') || item.name.toLowerCase().includes('backpack');
 
