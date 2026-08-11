@@ -110,7 +110,7 @@ export const SportsPage = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(275px, 1fr))',
           gap: '24px'
         }}
       >
@@ -132,7 +132,7 @@ export const SportsPage = () => {
           >
             <div>
               {/* Product Image & Badge */}
-              <div style={{ position: 'relative', width: '100%', height: '180px', background: '#f9fafb', overflow: 'hidden' }}>
+              <div className="product-img-wrap" style={{ position: 'relative', width: '100%', height: '135px', margin: 0, borderRadius: 0 }}>
                 <img
                   src={product.image}
                   alt={product.name}

@@ -65,9 +65,6 @@ export const ProductGrid = ({ title = "Best Selling Products", filterCategory })
     <section className="container product-grid-section">
       <div className="section-header">
         <h2 className="section-title">{title}</h2>
-        <div className="view-all-link" onClick={() => setActiveSection('Books')}>
-          View All <ArrowRight size={16} />
-        </div>
       </div>
 
       {isMobile ? (

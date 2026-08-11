@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { initialProducts, initialCoaches } from '../data/mockData';
+import { initialProducts, initialCoaches, initialBooks, initialUniforms } from '../data/mockData';
 
 export const ShopContext = createContext();
 
@@ -9,35 +9,93 @@ export const ShopProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState(initialProducts);
-  const [coaches, setCoaches] = useState(initialCoaches);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
-  const [isLoadingCoaches, setIsLoadingCoaches] = useState(false);
-  const [apiError, setApiError] = useState(false);
+  
+  // Search History state with local storage persistence
+  const [searchHistory, setSearchHistory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nextstore_search_history');
+      return saved ? JSON.parse(saved) : ['CBSE Books', 'School Uniform', 'Basketball', 'Gel Pen'];
+    } catch {
+      return ['CBSE Books', 'School Uniform', 'Basketball', 'Gel Pen'];
+    }
+  });
 
-  // Frontend-only state reset helpers
-  const fetchProducts = () => {
-    setIsLoadingProducts(false);
-    setApiError(false);
-  };
+  // Comprehensive Catalog combining all store items for universal search
+  const [products] = useState(() => {
+    const catalog = [...initialProducts];
+    
+    // Normalize and add books
+    (initialBooks || []).forEach((b) => {
+      catalog.push({
+        id: `book-cat-${b.id}`,
+        name: b.book_title || b.title,
+        category: 'Books',
+        sub_category: b.subject,
+        school_name: b.school_name,
+        board: b.board,
+        price: b.price,
+        price_range: b.price_range,
+        rating: 4.9,
+        image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80',
+        description: `Official ${b.board || 'CBSE'} prescribed book for ${b.subject}`
+      });
+    });
 
-  const fetchCoaches = () => {
-    setIsLoadingCoaches(false);
-    setApiError(false);
-  };
+    // Normalize and add uniforms
+    (initialUniforms || []).forEach((u) => {
+      catalog.push({
+        id: `uniform-cat-${u.id}`,
+        name: u.name,
+        category: 'Dress',
+        sub_category: u.dress_type,
+        price: u.price,
+        price_range: u.price_range,
+        rating: 4.8,
+        image: u.image || 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=500&q=80',
+        description: u.description
+      });
+    });
+
+    return catalog;
+  });
+
+  const [coaches] = useState(initialCoaches);
+  const [isLoadingProducts] = useState(false);
+  const [isLoadingCoaches] = useState(false);
+  const [apiError] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
-    fetchCoaches();
-  }, []);
+    try {
+      localStorage.setItem('nextstore_search_history', JSON.stringify(searchHistory));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [searchHistory]);
+
+  const addSearchHistory = (term) => {
+    if (!term || !term.trim()) return;
+    const cleanTerm = term.trim();
+    setSearchHistory((prev) => {
+      const filtered = prev.filter((item) => item.toLowerCase() !== cleanTerm.toLowerCase());
+      return [cleanTerm, ...filtered].slice(0, 8); // Keep top 8 recent searches
+    });
+  };
+
+  const removeSearchHistoryItem = (term) => {
+    setSearchHistory((prev) => prev.filter((item) => item !== term));
+  };
+
+  const clearSearchHistory = () => {
+    setSearchHistory([]);
+  };
 
   const addToCart = (product, quantityToAdd = 1) => {
     const qty = typeof quantityToAdd === 'number' && quantityToAdd > 0 ? quantityToAdd : (product.quantity || 1);
     setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id && item.name === product.name);
+      const existing = prev.find((item) => String(item.id) === String(product.id) && item.name === product.name);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id && item.name === product.name
+          String(item.id) === String(product.id) && item.name === product.name
             ? { ...item, quantity: item.quantity + qty }
             : item
         );
@@ -47,14 +105,14 @@ export const ShopProvider = ({ children }) => {
   };
 
   const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+    setCart((prev) => prev.filter((item) => String(item.id) !== String(id)));
   };
 
   const updateQuantity = (id, delta) => {
     setCart((prev) =>
       prev
         .map((item) => {
-          if (item.id === id) {
+          if (String(item.id) === String(id)) {
             const newQty = item.quantity + delta;
             return newQty > 0 ? { ...item, quantity: newQty } : null;
           }
@@ -91,12 +149,13 @@ export const ShopProvider = ({ children }) => {
         toggleWishlist,
         searchQuery,
         setSearchQuery,
+        searchHistory,
+        addSearchHistory,
+        removeSearchHistoryItem,
+        clearSearchHistory,
         products,
-        setProducts,
-        fetchProducts,
         isLoadingProducts,
         coaches,
-        fetchCoaches,
         isLoadingCoaches,
         apiError,
         cartCount,

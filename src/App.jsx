@@ -13,6 +13,7 @@ import { StationaryPage } from './pages/StationaryPage';
 import { ContactPage } from './pages/ContactPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { AdminPage } from './pages/AdminPage';
+import { SearchResultsPage } from './pages/SearchResultsPage';
 
 const sectionComponents = {
   Home: HomePage,
@@ -26,6 +27,7 @@ const sectionComponents = {
   Orders: OrdersPage,
   Contact: ContactPage,
   Admin: AdminPage,
+  SearchResults: SearchResultsPage,
 };
 
 const AppContent = () => {

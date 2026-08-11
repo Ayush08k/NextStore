@@ -1,20 +1,35 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { ShopContext } from '../context/ShopContext';
-import { ShoppingBag, Search, ShoppingCart, Heart } from 'lucide-react';
+import { ShoppingBag, Search, ShoppingCart, Heart, Clock, X, ArrowRight, TrendingUp } from 'lucide-react';
 
 export const Navbar = () => {
-  const { activeSection, setActiveSection, cartCount, setIsCartOpen, searchQuery, setSearchQuery, wishlist } = useContext(ShopContext);
+  const {
+    activeSection,
+    setActiveSection,
+    cartCount,
+    setIsCartOpen,
+    searchQuery,
+    setSearchQuery,
+    searchHistory,
+    addSearchHistory,
+    removeSearchHistoryItem,
+    clearSearchHistory,
+    products,
+    wishlist
+  } = useContext(ShopContext);
 
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchContainerRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        setIsVisible(false); // Hide on scroll down
+        setIsVisible(false);
       } else {
-        setIsVisible(true);  // Show on scroll up
+        setIsVisible(true);
       }
       setLastScrollY(currentScrollY);
     };
@@ -22,6 +37,47 @@ export const Navbar = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  // Click outside listener for search dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Filter live suggestions based on input
+  const query = (searchQuery || '').trim().toLowerCase();
+
+  const liveSuggestions = query
+    ? (products || []).filter((item) => {
+        if (!item || !item.name) return false;
+        return (
+          item.name.toLowerCase().includes(query) ||
+          (item.category && item.category.toLowerCase().includes(query)) ||
+          (item.sub_category && item.sub_category.toLowerCase().includes(query))
+        );
+      }).slice(0, 5)
+    : [];
+
+  const handleExecuteSearch = (searchTerm) => {
+    const termToSearch = searchTerm !== undefined ? searchTerm : searchQuery;
+    if (!termToSearch || !termToSearch.trim()) return;
+
+    addSearchHistory(termToSearch);
+    setSearchQuery(termToSearch);
+    setIsSearchFocused(false);
+    setActiveSection('SearchResults');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleExecuteSearch();
+    }
+  };
 
   const navLinks = [
     { name: 'Home', id: 'Home' },
@@ -68,14 +124,138 @@ export const Navbar = () => {
 
         {/* Right Search & Action Controls */}
         <div className="nav-actions">
-          <div className="search-box-redesigned">
-            <Search size={16} className="search-icon-svg" />
+          {/* SEARCH BOX WITH DROPDOWN SUGGESTIONS & HISTORY */}
+          <div
+            ref={searchContainerRef}
+            className="search-box-redesigned"
+            style={{ position: 'relative', width: isSearchFocused ? '240px' : '190px' }}
+          >
+            <Search size={16} className="search-icon-svg" style={{ cursor: 'pointer' }} onClick={() => handleExecuteSearch()} />
             <input
               type="text"
               placeholder="Search books, uniforms, gear..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onKeyDown={handleKeyDown}
             />
+
+            {/* SEARCH SUGGESTIONS & HISTORY OVERLAY DROPDOWN */}
+            {isSearchFocused && (
+              <div
+                className="search-dropdown-menu"
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  left: '-10px',
+                  right: '-10px',
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  boxShadow: '0 12px 32px rgba(0, 0, 0, 0.15)',
+                  border: '1px solid #e5e7eb',
+                  padding: '14px 16px',
+                  zIndex: 200,
+                  maxHeight: '380px',
+                  overflowY: 'auto'
+                }}
+              >
+                {/* 1. LIVE MATCHING SUGGESTIONS */}
+                {query.length > 0 && (
+                  <div style={{ marginBottom: '14px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#6c804b', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <TrendingUp size={12} /> Live Suggestions
+                    </div>
+                    {liveSuggestions.length === 0 ? (
+                      <div style={{ fontSize: '12.5px', color: '#9ca3af', padding: '6px 0' }}>
+                        No direct matches found
+                      </div>
+                    ) : (
+                      liveSuggestions.map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => handleExecuteSearch(item.name)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            padding: '8px 10px',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            transition: 'background 0.2s ease',
+                          }}
+                          className="search-suggest-item"
+                        >
+                          <Search size={13} color="#6b7280" />
+                          <div style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '13px', color: '#1f2937' }}>
+                            {item.name}
+                          </div>
+                          <span style={{ fontSize: '10px', background: '#f0f4ea', color: '#586a3b', padding: '2px 6px', borderRadius: '6px', fontWeight: 700 }}>
+                            {item.category || 'Store'}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+
+                {/* 2. RECENT SEARCH HISTORY */}
+                {searchHistory.length > 0 && (
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#6b7280', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Clock size={12} /> Recent Searches
+                      </span>
+                      <button
+                        onClick={clearSearchHistory}
+                        style={{ fontSize: '11px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
+                      >
+                        Clear All
+                      </button>
+                    </div>
+
+                    {searchHistory.map((historyItem, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '6px 8px',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '13px',
+                          color: '#374151'
+                        }}
+                        className="search-suggest-item"
+                      >
+                        <div
+                          style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}
+                          onClick={() => handleExecuteSearch(historyItem)}
+                        >
+                          <Clock size={12} color="#9ca3af" />
+                          <span>{historyItem}</span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeSearchHistoryItem(historyItem);
+                          }}
+                          style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: '2px' }}
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {query.length === 0 && searchHistory.length === 0 && (
+                  <div style={{ textAlign: 'center', padding: '16px 0', fontSize: '12.5px', color: '#9ca3af' }}>
+                    Type a book title, uniform, or sports product...
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {wishlist.length > 0 && (

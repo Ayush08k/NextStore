@@ -216,7 +216,7 @@ export const OrdersPage = () => {
                   style={{ padding: '11px 26px', fontSize: '14px', borderRadius: '10px' }}
                   disabled={isSubmittingOrder || cart.length === 0}
                 >
-                  {isSubmittingOrder ? 'Submitting Order...' : 'Submit Doorstep Delivery Order'}
+                  {isSubmittingOrder ? 'Submitting Order...' : 'Order Now'}
                 </button>
               </div>
             </form>

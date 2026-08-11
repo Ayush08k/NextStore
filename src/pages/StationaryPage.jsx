@@ -1,21 +1,21 @@
 import React, { useState, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
-import { ShoppingBag, Sparkles, Search, Filter, CheckCircle } from 'lucide-react';
+import { ShoppingBag, Sparkles, Search, Filter, ShoppingCart, Check } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { AddToCartBtn } from '../components/AddToCartBtn';
 
 export const StationaryPage = () => {
   const { products, addToCart, isLoadingProducts } = useContext(ShopContext);
 
-  // Customized Bag Studio State
+  // Selected Bag for Customization (defaults to null, active when clicked)
+  const [selectedBag, setSelectedBag] = useState(null);
   const [studentName, setStudentName] = useState('ALEX SMITH');
   const [bagColor, setBagColor] = useState('Olive Green');
-  const [bagPrice] = useState(1299.00);
+  const [isBagAdded, setIsBagAdded] = useState(false);
 
   // Search & Filter State
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [addedMsg, setAddedMsg] = useState('');
 
   const categoriesList = [
     'All',
@@ -26,30 +26,38 @@ export const StationaryPage = () => {
   ];
 
   // Filter central products for Stationary category
-  const allStationeryItems = products.filter(
-    (p) => p.category === 'Stationary' || p.category === 'Custom Bags'
+  const allStationeryItems = (products || []).filter(
+    (p) => p && (p.category === 'Stationary' || p.category === 'Custom Bags')
   );
 
+  const handleSelectBagForCustomization = (bag) => {
+    setSelectedBag(bag);
+    // Smooth scroll down to custom studio at the end of the page
+    setTimeout(() => {
+      document.getElementById('custom-bag-studio')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   const handleAddCustomBag = () => {
+    if (!selectedBag) return;
     addToCart({
-      id: `custom-bag-${Date.now()}`,
-      name: `Customized School Backpack (Printed: "${studentName}")`,
+      id: `custom-bag-${selectedBag.id}-${Date.now()}`,
+      name: `${selectedBag.name} (Custom Printed: "${studentName}", Color: ${bagColor})`,
       category: 'Custom Bags',
-      price: bagPrice,
-      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80'
+      price: selectedBag.price,
+      image: selectedBag.image
     });
-    setAddedMsg('Customized Bag added to your cart!');
-    setTimeout(() => setAddedMsg(''), 4000);
+    setIsBagAdded(true);
+    setTimeout(() => setIsBagAdded(false), 2000);
   };
 
   const handleAddToCart = (item) => {
     addToCart(item);
-    setAddedMsg(`"${item.name}" added to cart!`);
-    setTimeout(() => setAddedMsg(''), 4000);
   };
 
   // Filter products by selected sub-category pill and search input
   const filteredProducts = allStationeryItems.filter((item) => {
+    if (!item) return false;
     const matchesCategory =
       selectedCategory === 'All' ||
       item.sub_category === selectedCategory ||
@@ -58,10 +66,12 @@ export const StationaryPage = () => {
       (selectedCategory === 'Filing & Organization' && item.sub_category?.includes('Filing')) ||
       (selectedCategory === 'Desk Accessories & Fasteners' && item.sub_category?.includes('Desk'));
 
+    const q = (searchTerm || '').toLowerCase();
     const matchesSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.sub_category && item.sub_category.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
+      !q ||
+      (item.name && item.name.toLowerCase().includes(q)) ||
+      (item.sub_category && item.sub_category.toLowerCase().includes(q)) ||
+      (item.description && item.description.toLowerCase().includes(q));
 
     return matchesCategory && matchesSearch;
   });
@@ -70,72 +80,12 @@ export const StationaryPage = () => {
     <div className="container" style={{ padding: '40px 20px' }}>
       <div className="section-header">
         <div>
-          <h1 className="section-title">Stationery & Office Supplies Store</h1>
+          <h1 className="section-title">Stationery &amp; Office Supplies Store</h1>
           <p style={{ color: '#6b7280', marginTop: '4px' }}>
-            Shop writing instruments, paper products, notebooks, filing folders, desk accessories, and customized bags.
+            Shop writing instruments, paper products, notebooks, filing folders, desk accessories, and customized school bags.
           </p>
         </div>
       </div>
-
-      {/* Customized Bag Printing Studio Top Banner */}
-      <div className="form-card" style={{ marginBottom: '40px', background: '#fbfbf8', border: '1px solid #e2e5da' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-          <Sparkles color="#6c804b" size={24} />
-          <h2 style={{ fontSize: '22px' }}>Customized Bag Printing Studio</h2>
-        </div>
-
-        <div className="grid-2" style={{ alignItems: 'center' }}>
-          <div>
-            <div className="form-group">
-              <label className="form-label">Student Name for Bag Print</label>
-              <input
-                type="text"
-                className="form-control"
-                value={studentName}
-                onChange={(e) => setStudentName(e.target.value.toUpperCase())}
-                placeholder="Enter Student Full Name..."
-                maxLength={24}
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Backpack Color</label>
-              <select
-                className="form-control"
-                value={bagColor}
-                onChange={(e) => setBagColor(e.target.value)}
-              >
-                <option value="Olive Green">Olive Green (Signature Edition)</option>
-                <option value="Navy Blue">Navy Blue</option>
-                <option value="Graphite Black">Graphite Black</option>
-              </select>
-            </div>
-
-            <div style={{ marginTop: '24px' }}>
-              <div style={{ fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>
-                Price: ₹{bagPrice.toFixed(2)}
-              </div>
-              <button className="btn-primary-green" onClick={handleAddCustomBag}>
-                <ShoppingCart size={18} /> Order Customized Bag
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <div className="bag-studio-preview">
-              <ShoppingBag size={72} color="#6c804b" />
-              <div className="printed-text-overlay">
-                NAME: {studentName || 'YOUR NAME'}
-              </div>
-              <span style={{ position: 'absolute', bottom: '12px', fontSize: '12px', color: '#6c804b', fontWeight: 600 }}>
-                ✨ Live Bag Printing Preview ({bagColor})
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
 
       {/* SEARCH BAR & CATEGORY FILTERS */}
       <div className="form-card" style={{ marginBottom: '30px', background: '#ffffff', padding: '24px' }}>
@@ -146,7 +96,7 @@ export const StationaryPage = () => {
               type="text"
               className="form-control"
               style={{ paddingLeft: '42px', fontSize: '14px', borderRadius: '24px' }}
-              placeholder="Search stationery (e.g. Gel Pen, Spiral Notebook, Glue Stick, Stapler, File Binder...)"
+              placeholder="Search stationery (e.g. Gel Pen, Notebook, Bag, Stapler, File Binder...)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -187,45 +137,177 @@ export const StationaryPage = () => {
           </button>
         </div>
       ) : (
-        <div className="products-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-          {filteredProducts.map((item) => (
-            <div key={item.id} className="product-card">
-              <div className="product-img-wrap">
-                <img src={item.image} alt={item.name} />
-              </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(275px, 1fr))', gap: '20px', marginBottom: '50px' }}>
+          {filteredProducts.map((item) => {
+            const isBagItem = item.category === 'Custom Bags' || item.name.toLowerCase().includes('bag') || item.name.toLowerCase().includes('backpack');
 
-              <div className="product-info-body">
-                <span style={{ fontSize: '11px', background: '#f0f4ea', color: '#4a5c32', padding: '3px 8px', borderRadius: '10px', fontWeight: 700, textTransform: 'uppercase' }}>
-                  {item.sub_category || 'Stationery'}
-                </span>
+            return (
+              <div key={item.id} className="product-card">
+                <div className="product-img-wrap" style={{ height: '135px' }}>
+                  <img src={item.image} alt={item.name} />
+                </div>
 
-                <h3 className="product-title" style={{ marginTop: '8px', fontSize: '14.5px', height: '38px' }}>
-                  {item.name}
-                </h3>
+                <div className="product-info-body">
+                  <span style={{ fontSize: '11px', background: '#f0f4ea', color: '#4a5c32', padding: '3px 8px', borderRadius: '10px', fontWeight: 700, textTransform: 'uppercase' }}>
+                    {item.sub_category || 'Stationery'}
+                  </span>
 
-                {item.price_range && (
-                  <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>
-                    Range: {item.price_range}
+                  <h3 className="product-title" style={{ marginTop: '8px', fontSize: '14.5px', height: '38px' }}>
+                    {item.name}
+                  </h3>
+
+                  {item.price_range && (
+                    <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>
+                      Range: {item.price_range}
+                    </div>
+                  )}
+
+                  <div className="product-price-row" style={{ margin: '4px 0 14px 0' }}>
+                    <span className="current-price" style={{ fontSize: '16.5px' }}>₹{parseFloat(item.price).toFixed(2)}</span>
+                    {item.original_price && (
+                      <span className="original-price">₹{parseFloat(item.original_price).toFixed(2)}</span>
+                    )}
                   </div>
-                )}
 
-                <div className="product-price-row" style={{ margin: '4px 0 14px 0' }}>
-                  <span className="current-price" style={{ fontSize: '16.5px' }}>₹{parseFloat(item.price).toFixed(2)}</span>
-                  {item.original_price && (
-                    <span className="original-price">₹{parseFloat(item.original_price).toFixed(2)}</span>
+                  {isBagItem ? (
+                    <button
+                      className="btn-primary-green"
+                      style={{ width: '100%', borderRadius: '10px', fontSize: '12.5px', padding: '10px', background: '#4a5c32' }}
+                      onClick={() => handleSelectBagForCustomization(item)}
+                    >
+                      <Sparkles size={15} /> Customize &amp; Print Name
+                    </button>
+                  ) : (
+                    <AddToCartBtn
+                      product={item}
+                      onAddToCart={(p, q) => handleAddToCart(p, q)}
+                      className="btn-primary-green"
+                    />
                   )}
                 </div>
-                <AddToCartBtn
-                  product={item}
-                  onClick={() => handleAddToCart(item)}
-                  className="btn-primary-green"
-                  style={{ width: '100%', borderRadius: '10px', fontSize: '13px', padding: '10px' }}
-                />
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
+
+      {/* CUSTOMIZED BAG PRINTING STUDIO AT THE END OF THE PAGE */}
+      <div
+        id="custom-bag-studio"
+        className="form-card"
+        style={{
+          marginTop: '40px',
+          background: selectedBag ? '#f4f7ee' : '#fafaf8',
+          border: selectedBag ? '2px solid #6c804b' : '1.5px dashed #d1d5db',
+          borderRadius: '20px',
+          padding: '32px',
+          transition: 'all 0.3s ease'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+          <Sparkles color="#6c804b" size={26} />
+          <h2 style={{ fontSize: '22px', color: '#1f2937' }}>
+            Customized Bag Printing Studio
+          </h2>
+        </div>
+
+        {!selectedBag ? (
+          <div style={{ textAlign: 'center', padding: '30px 20px', color: '#6b7280' }}>
+            <ShoppingBag size={48} color="#9ca3af" style={{ marginBottom: '12px' }} />
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#374151', marginBottom: '4px' }}>
+              No Bag Selected Yet
+            </h3>
+            <p style={{ fontSize: '13.5px' }}>
+              Select any school bag or backpack from the catalog above and click <strong>"Customize &amp; Print Name"</strong> to activate name printing and color customization!
+            </p>
+          </div>
+        ) : (
+          <div>
+            <div style={{ background: '#ffffff', padding: '12px 18px', borderRadius: '12px', marginBottom: '24px', border: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+              <div>
+                <span style={{ fontSize: '11px', color: '#6c804b', fontWeight: 800, textTransform: 'uppercase' }}>Selected Bag Model</span>
+                <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#111827' }}>{selectedBag.name}</h4>
+              </div>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#22252a' }}>
+                ₹{parseFloat(selectedBag.price).toFixed(2)}
+              </span>
+            </div>
+
+            <div className="grid-2" style={{ alignItems: 'center', gap: '30px' }}>
+              <div>
+                {/* Name Input */}
+                <div className="form-group">
+                  <label className="form-label" style={{ fontWeight: 700 }}>1. Enter Student Name to Print *</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value.toUpperCase())}
+                    placeholder="Enter Student Full Name (e.g. ALEX SMITH)..."
+                    maxLength={24}
+                    style={{ fontSize: '14px', borderRadius: '10px', padding: '12px 14px' }}
+                  />
+                </div>
+
+                {/* Color Selection */}
+                <div className="form-group" style={{ marginTop: '16px' }}>
+                  <label className="form-label" style={{ fontWeight: 700 }}>2. Select Color Variant *</label>
+                  <select
+                    className="form-control"
+                    value={bagColor}
+                    onChange={(e) => setBagColor(e.target.value)}
+                    style={{ fontSize: '14px', borderRadius: '10px', padding: '12px 14px' }}
+                  >
+                    <option value="Olive Green">Olive Green (Signature Edition)</option>
+                    <option value="Navy Blue">Navy Blue</option>
+                    <option value="Graphite Black">Graphite Black</option>
+                    <option value="Crimson Red">Crimson Red</option>
+                    <option value="Royal Purple">Royal Purple</option>
+                  </select>
+                </div>
+
+                <div style={{ marginTop: '24px' }}>
+                  <button
+                    className={`btn-primary-green ${isBagAdded ? 'btn-added-state' : ''}`}
+                    onClick={handleAddCustomBag}
+                    disabled={isBagAdded}
+                    style={{
+                      width: '100%',
+                      padding: '13px',
+                      borderRadius: '12px',
+                      fontSize: '14px',
+                      backgroundColor: isBagAdded ? '#15803d' : undefined
+                    }}
+                  >
+                    {isBagAdded ? (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Check size={18} className="btn-check-anim" /> Added Customized Bag to Cart!
+                      </span>
+                    ) : (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <ShoppingCart size={18} /> Add Customized Bag to Cart (₹{parseFloat(selectedBag.price).toFixed(2)})
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Live Preview */}
+              <div>
+                <div className="bag-studio-preview" style={{ background: bagColor === 'Navy Blue' ? '#1e3a8a' : bagColor === 'Graphite Black' ? '#111827' : bagColor === 'Crimson Red' ? '#991b1b' : bagColor === 'Royal Purple' ? '#581c87' : '#f0f4ea', transition: 'background 0.3s ease' }}>
+                  <ShoppingBag size={72} color={['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#ffffff' : '#6c804b'} />
+                  <div className="printed-text-overlay" style={{ color: ['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#fbbf24' : '#22252a' }}>
+                    NAME: {studentName || 'YOUR NAME'}
+                  </div>
+                  <span style={{ position: 'absolute', bottom: '12px', fontSize: '12px', color: ['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#ffffff' : '#6c804b', fontWeight: 600 }}>
+                    ✨ Live Printing Preview ({selectedBag.name} — {bagColor})
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
