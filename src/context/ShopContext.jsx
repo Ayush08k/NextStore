@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { initialProducts, initialCoaches } from '../data/mockData';
 
 export const ShopContext = createContext();
 
@@ -8,50 +9,21 @@ export const ShopProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState([]);
-  const [coaches, setCoaches] = useState([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
-  const [isLoadingCoaches, setIsLoadingCoaches] = useState(true);
+  const [products, setProducts] = useState(initialProducts);
+  const [coaches, setCoaches] = useState(initialCoaches);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [isLoadingCoaches, setIsLoadingCoaches] = useState(false);
   const [apiError, setApiError] = useState(false);
 
-  // Fetch initial products
-  const fetchProducts = async () => {
-    setIsLoadingProducts(true);
-    try {
-      const res = await fetch('/api/products');
-      if (res.ok) {
-        const data = await res.json();
-        setProducts(data);
-        setApiError(false);
-      } else {
-        setApiError(true);
-      }
-    } catch (err) {
-      console.error('Failed to fetch products:', err);
-      setApiError(true);
-    } finally {
-      setIsLoadingProducts(false);
-    }
+  // Frontend-only state reset helpers
+  const fetchProducts = () => {
+    setIsLoadingProducts(false);
+    setApiError(false);
   };
 
-  // Fetch initial coaches
-  const fetchCoaches = async () => {
-    setIsLoadingCoaches(true);
-    try {
-      const res = await fetch('/api/coaches');
-      if (res.ok) {
-        const data = await res.json();
-        setCoaches(data);
-        setApiError(false);
-      } else {
-        setApiError(true);
-      }
-    } catch (err) {
-      console.error('Failed to fetch coaches:', err);
-      setApiError(true);
-    } finally {
-      setIsLoadingCoaches(false);
-    }
+  const fetchCoaches = () => {
+    setIsLoadingCoaches(false);
+    setApiError(false);
   };
 
   useEffect(() => {

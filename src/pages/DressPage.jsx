@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { ShoppingCart, Shirt, MapPin, School, SlidersHorizontal, ImageOff } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
+import { initialSchools, initialUniforms } from '../data/mockData';
 
 const GENDER_FILTERS = ['All', 'Boys', 'Girls', 'Unisex'];
 
@@ -47,33 +48,26 @@ export const DressPage = () => {
 
   // Load cities
   useEffect(() => {
-    fetch('/api/schools/cities')
-      .then(r => r.json())
-      .then(data => {
-        setCities(data);
-        // Don't auto-select: start blank
-      });
+    const uniqueCities = Array.from(new Set(initialSchools.map(s => s.city))).sort();
+    setCities(uniqueCities);
   }, []);
 
   // Load schools when city changes
   useEffect(() => {
     if (!selectedCity) { setSchools([]); setSelectedSchoolId(''); setUniforms([]); return; }
-    fetch(`/api/schools?city=${encodeURIComponent(selectedCity)}`)
-      .then(r => r.json())
-      .then(data => {
-        setSchools(data);
-        setSelectedSchoolId('');
-        setUniforms([]);
-      });
+    const filtered = initialSchools.filter(s => s.city === selectedCity);
+    setSchools(filtered);
+    setSelectedSchoolId('');
+    setUniforms([]);
   }, [selectedCity]);
 
   // Load uniforms when school changes
   useEffect(() => {
     if (!selectedSchoolId) { setUniforms([]); return; }
     setLoading(true);
-    fetch(`/api/uniforms?school_id=${selectedSchoolId}`)
-      .then(r => r.json())
-      .then(data => { setUniforms(data); setLoading(false); });
+    const filtered = initialUniforms.filter(u => String(u.school_id) === String(selectedSchoolId));
+    setUniforms(filtered);
+    setLoading(false);
   }, [selectedSchoolId]);
 
   const filtered = uniforms.filter(u =>

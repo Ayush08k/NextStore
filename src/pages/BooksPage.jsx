@@ -3,6 +3,8 @@ import { ShopContext } from '../context/ShopContext';
 import { BookOpen, CheckCircle, ShoppingCart, Award, Sparkles, Compass } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
 
+import { initialSchools, initialBooks } from '../data/mockData';
+
 export const BooksPage = () => {
   const { addToCart } = useContext(ShopContext);
   const [cities, setCities] = useState([]);
@@ -190,38 +192,33 @@ export const BooksPage = () => {
     }
   ];
 
-  // Fetch Cities on load
+  // Initialize Cities on load
   useEffect(() => {
-    fetch('/api/schools/cities')
-      .then((res) => res.json())
-      .then((data) => {
-        setCities(data);
-        if (data.length > 0) setSelectedCity(data[0]);
-      });
+    const uniqueCities = Array.from(new Set(initialSchools.map(s => s.city))).sort();
+    setCities(uniqueCities);
+    if (uniqueCities.length > 0) setSelectedCity(uniqueCities[0]);
   }, []);
 
-  // Fetch Schools when City changes
+  // Filter Schools when City changes
   useEffect(() => {
     if (selectedCity) {
-      fetch(`/api/schools?city=${encodeURIComponent(selectedCity)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setSchools(data);
-          if (data.length > 0) setSelectedSchoolId(data[0].id);
-        });
+      const filtered = initialSchools.filter(s => s.city === selectedCity);
+      setSchools(filtered);
+      if (filtered.length > 0) setSelectedSchoolId(String(filtered[0].id));
     }
   }, [selectedCity]);
 
-  // Fetch Books when School, Class, or Board changes
+  // Filter Books when School, Class, or Board changes
   useEffect(() => {
     if (selectedSchoolId && selectedClass) {
       setLoading(true);
-      fetch(`/api/books?school_id=${selectedSchoolId}&class_grade=${encodeURIComponent(selectedClass)}&board=${selectedBoard}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setBooks(data);
-          setLoading(false);
-        });
+      const filtered = initialBooks.filter(b => 
+        String(b.school_id) === String(selectedSchoolId) &&
+        b.class_grade === selectedClass &&
+        b.board === selectedBoard
+      );
+      setBooks(filtered);
+      setLoading(false);
     }
   }, [selectedSchoolId, selectedClass, selectedBoard]);
 

@@ -1711,3 +1711,44 @@ a {
     grid-template-columns: 1fr 1fr !important;
   }
 }
+
+/* ════════════ Page Entrance & Transitions ════════════ */
+.page-transition-wrapper {
+  will-change: opacity, transform;
+}
+
+.page-enter {
+  animation: pageEnterAnim 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-exit {
+  animation: pageExitAnim 0.28s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+.page-idle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes pageEnterAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pageExitAnim {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
