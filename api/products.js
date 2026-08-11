@@ -7,6 +7,12 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  if (!db) {
+    return res.status(500).json({
+      error: 'Firebase database initialization failed on server. Please ensure FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, and FIREBASE_PRIVATE_KEY are set in Vercel project environment variables.'
+    });
+  }
+
   if (req.method === 'GET') {
     try {
       const { category, search } = req.query;

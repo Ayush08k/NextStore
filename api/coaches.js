@@ -6,6 +6,10 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  if (!db) {
+    return res.status(500).json({ error: 'Firebase DB not initialized. Check Vercel environment variables.' });
+  }
+
   if (req.method === 'GET') {
     try {
       const { sport } = req.query;
