@@ -1,16 +1,17 @@
 import React, { useState, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
-import { ShoppingBag, Sparkles, Search, Filter, ShoppingCart, Check } from 'lucide-react';
+import { ShoppingBag, Sparkles, Search, Filter, ShoppingCart, Check, Tag } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { AddToCartBtn } from '../components/AddToCartBtn';
 
 export const StationaryPage = () => {
   const { products, addToCart, isLoadingProducts } = useContext(ShopContext);
 
-  // Selected Bag for Customization (defaults to null, active when clicked)
+  // Selected Bag for Customization
   const [selectedBag, setSelectedBag] = useState(null);
   const [studentName, setStudentName] = useState('ALEX SMITH');
   const [bagColor, setBagColor] = useState('Olive Green');
+  const [isCustomized, setIsCustomized] = useState(true); // Default to custom (+10% fee)
   const [isBagAdded, setIsBagAdded] = useState(false);
 
   // Search & Filter State
@@ -30,29 +31,41 @@ export const StationaryPage = () => {
     (p) => p && (p.category === 'Stationary' || p.category === 'Custom Bags')
   );
 
-  const handleSelectBagForCustomization = (bag) => {
+  const handleSelectBagForCustomization = (bag, shouldCustomize = true) => {
     setSelectedBag(bag);
+    setIsCustomized(shouldCustomize);
     // Smooth scroll down to custom studio at the end of the page
     setTimeout(() => {
       document.getElementById('custom-bag-studio')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
 
-  const handleAddCustomBag = () => {
+  // Base and Final Price Calculation (+10% fee if customized)
+  const basePrice = selectedBag ? parseFloat(selectedBag.price) : 0;
+  const customFee = isCustomized ? basePrice * 0.10 : 0;
+  const finalBagPrice = basePrice + customFee;
+
+  const handleAddStudioBagToCart = () => {
     if (!selectedBag) return;
+
+    const bagNameFormatted = isCustomized
+      ? `${selectedBag.name} (Custom Printed: "${studentName}", Color: ${bagColor})`
+      : `${selectedBag.name} (Standard Picture Edition, Color: ${bagColor})`;
+
     addToCart({
-      id: `custom-bag-${selectedBag.id}-${Date.now()}`,
-      name: `${selectedBag.name} (Custom Printed: "${studentName}", Color: ${bagColor})`,
+      id: `bag-${selectedBag.id}-${isCustomized ? 'custom' : 'std'}-${Date.now()}`,
+      name: bagNameFormatted,
       category: 'Custom Bags',
-      price: selectedBag.price,
+      price: finalBagPrice,
       image: selectedBag.image
     });
+
     setIsBagAdded(true);
     setTimeout(() => setIsBagAdded(false), 2000);
   };
 
-  const handleAddToCart = (item) => {
-    addToCart(item);
+  const handleAddToCart = (item, qty = 1) => {
+    addToCart(item, qty);
   };
 
   // Filter products by selected sub-category pill and search input
@@ -82,7 +95,7 @@ export const StationaryPage = () => {
         <div>
           <h1 className="section-title">Stationery &amp; Office Supplies Store</h1>
           <p style={{ color: '#6b7280', marginTop: '4px' }}>
-            Shop writing instruments, paper products, notebooks, filing folders, desk accessories, and customized school bags.
+            Shop writing instruments, paper products, notebooks, filing folders, desk accessories, and school bags.
           </p>
         </div>
       </div>
@@ -170,13 +183,24 @@ export const StationaryPage = () => {
                   </div>
 
                   {isBagItem ? (
-                    <button
-                      className="btn-primary-green"
-                      style={{ width: '100%', borderRadius: '10px', fontSize: '12.5px', padding: '10px', background: '#4a5c32' }}
-                      onClick={() => handleSelectBagForCustomization(item)}
-                    >
-                      <Sparkles size={15} /> Customize &amp; Print Name
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {/* Button 1: Order Default Bag at Base Price */}
+                      <AddToCartBtn
+                        product={item}
+                        onAddToCart={(p, q) => handleAddToCart(p, q)}
+                        className="btn-primary-green"
+                        label="Order Default Bag"
+                        style={{ fontSize: '12px', padding: '8px' }}
+                      />
+                      {/* Button 2: Customize Name (+10% Fee) */}
+                      <button
+                        className="btn-outline-grey"
+                        style={{ width: '100%', borderRadius: '10px', fontSize: '11.5px', padding: '7px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+                        onClick={() => handleSelectBagForCustomization(item, true)}
+                      >
+                        <Sparkles size={13} color="#6c804b" /> Customize Name (+10%)
+                      </button>
+                    </div>
                   ) : (
                     <AddToCartBtn
                       product={item}
@@ -207,7 +231,7 @@ export const StationaryPage = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <Sparkles color="#6c804b" size={26} />
           <h2 style={{ fontSize: '22px', color: '#1f2937' }}>
-            Customized Bag Printing Studio
+            Bag Ordering &amp; Customization Studio
           </h2>
         </div>
 
@@ -218,40 +242,126 @@ export const StationaryPage = () => {
               No Bag Selected Yet
             </h3>
             <p style={{ fontSize: '13.5px' }}>
-              Select any school bag or backpack from the catalog above and click <strong>"Customize &amp; Print Name"</strong> to activate name printing and color customization!
+              Select any school bag from the catalog above and choose <strong>"Order Default Bag"</strong> (Base Price) or <strong>"Customize Name (+10%)"</strong> to configure your order.
             </p>
           </div>
         ) : (
           <div>
-            <div style={{ background: '#ffffff', padding: '12px 18px', borderRadius: '12px', marginBottom: '24px', border: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+            <div style={{ background: '#ffffff', padding: '14px 20px', borderRadius: '14px', marginBottom: '24px', border: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <span style={{ fontSize: '11px', color: '#6c804b', fontWeight: 800, textTransform: 'uppercase' }}>Selected Bag Model</span>
-                <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#111827' }}>{selectedBag.name}</h4>
+                <span style={{ fontSize: '11px', color: '#6c804b', fontWeight: 800, textTransform: 'uppercase' }}>Selected Model</span>
+                <h4 style={{ fontSize: '16.5px', fontWeight: 800, color: '#111827' }}>{selectedBag.name}</h4>
               </div>
-              <span style={{ fontSize: '18px', fontWeight: 800, color: '#22252a' }}>
-                ₹{parseFloat(selectedBag.price).toFixed(2)}
-              </span>
+
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: 600 }}>Total Calculated Price</div>
+                <span style={{ fontSize: '20px', fontWeight: 900, color: '#22252a' }}>
+                  ₹{finalBagPrice.toFixed(2)}
+                </span>
+                {isCustomized && (
+                  <span style={{ display: 'block', fontSize: '11px', color: '#15803d', fontWeight: 700 }}>
+                    Includes +10% Custom Printing Charge (+₹{customFee.toFixed(2)})
+                  </span>
+                )}
+              </div>
             </div>
 
-            <div className="grid-2" style={{ alignItems: 'center', gap: '30px' }}>
+            <div className="grid-2" style={{ alignItems: 'flex-start', gap: '30px' }}>
               <div>
-                {/* Name Input */}
-                <div className="form-group">
-                  <label className="form-label" style={{ fontWeight: 700 }}>1. Enter Student Name to Print *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value.toUpperCase())}
-                    placeholder="Enter Student Full Name (e.g. ALEX SMITH)..."
-                    maxLength={24}
-                    style={{ fontSize: '14px', borderRadius: '10px', padding: '12px 14px' }}
-                  />
+                {/* Customization Selection Option */}
+                <div className="form-group" style={{ marginBottom: '20px' }}>
+                  <label className="form-label" style={{ fontWeight: 700, marginBottom: '8px', display: 'block' }}>
+                    1. Choose Bag Order Edition *
+                  </label>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {/* Option A: Standard Default Bag */}
+                    <div
+                      onClick={() => setIsCustomized(false)}
+                      style={{
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        border: !isCustomized ? '2px solid #6c804b' : '1px solid #d1d5db',
+                        background: !isCustomized ? '#ffffff' : '#f9fafb',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Tag size={18} color={!isCustomized ? '#6c804b' : '#9ca3af'} />
+                        <div>
+                          <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#1f2937' }}>
+                            Default Picture Bag (Standard Edition)
+                          </div>
+                          <div style={{ fontSize: '11.5px', color: '#6b7280' }}>
+                            Order exact bag shown in picture at standard base price
+                          </div>
+                        </div>
+                      </div>
+                      <span style={{ fontSize: '14px', fontWeight: 800, color: '#22252a' }}>
+                        ₹{basePrice.toFixed(2)}
+                      </span>
+                    </div>
+
+                    {/* Option B: Customized Name Printing (+10%) */}
+                    <div
+                      onClick={() => setIsCustomized(true)}
+                      style={{
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        border: isCustomized ? '2px solid #6c804b' : '1px solid #d1d5db',
+                        background: isCustomized ? '#ffffff' : '#f9fafb',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Sparkles size={18} color={isCustomized ? '#6c804b' : '#9ca3af'} />
+                        <div>
+                          <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#1f2937' }}>
+                            Customized Name Printing Edition (+10% Fee)
+                          </div>
+                          <div style={{ fontSize: '11.5px', color: '#6b7280' }}>
+                            Prints student name on backpack (+10% charge)
+                          </div>
+                        </div>
+                      </div>
+                      <span style={{ fontSize: '14px', fontWeight: 800, color: '#15803d' }}>
+                        ₹{(basePrice * 1.10).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
+                {/* Name Input (Enabled if customized) */}
+                {isCustomized && (
+                  <div className="form-group" style={{ marginBottom: '16px' }}>
+                    <label className="form-label" style={{ fontWeight: 700 }}>
+                      2. Enter Student Name to Print *
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={studentName}
+                      onChange={(e) => setStudentName(e.target.value.toUpperCase())}
+                      placeholder="Enter Student Full Name (e.g. ALEX SMITH)..."
+                      maxLength={24}
+                      style={{ fontSize: '14px', borderRadius: '10px', padding: '12px 14px' }}
+                    />
+                  </div>
+                )}
+
                 {/* Color Selection */}
-                <div className="form-group" style={{ marginTop: '16px' }}>
-                  <label className="form-label" style={{ fontWeight: 700 }}>2. Select Color Variant *</label>
+                <div className="form-group" style={{ marginBottom: '20px' }}>
+                  <label className="form-label" style={{ fontWeight: 700 }}>
+                    {isCustomized ? '3. Select Color Variant *' : '2. Select Color Variant *'}
+                  </label>
                   <select
                     className="form-control"
                     value={bagColor}
@@ -269,7 +379,7 @@ export const StationaryPage = () => {
                 <div style={{ marginTop: '24px' }}>
                   <button
                     className={`btn-primary-green ${isBagAdded ? 'btn-added-state' : ''}`}
-                    onClick={handleAddCustomBag}
+                    onClick={handleAddStudioBagToCart}
                     disabled={isBagAdded}
                     style={{
                       width: '100%',
@@ -281,11 +391,11 @@ export const StationaryPage = () => {
                   >
                     {isBagAdded ? (
                       <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Check size={18} className="btn-check-anim" /> Added Customized Bag to Cart!
+                        <Check size={18} className="btn-check-anim" /> Added Bag to Cart!
                       </span>
                     ) : (
                       <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <ShoppingCart size={18} /> Add Customized Bag to Cart (₹{parseFloat(selectedBag.price).toFixed(2)})
+                        <ShoppingCart size={18} /> Add {isCustomized ? 'Customized' : 'Default'} Bag to Cart (₹{finalBagPrice.toFixed(2)})
                       </span>
                     )}
                   </button>
@@ -296,11 +406,13 @@ export const StationaryPage = () => {
               <div>
                 <div className="bag-studio-preview" style={{ background: bagColor === 'Navy Blue' ? '#1e3a8a' : bagColor === 'Graphite Black' ? '#111827' : bagColor === 'Crimson Red' ? '#991b1b' : bagColor === 'Royal Purple' ? '#581c87' : '#f0f4ea', transition: 'background 0.3s ease' }}>
                   <ShoppingBag size={72} color={['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#ffffff' : '#6c804b'} />
-                  <div className="printed-text-overlay" style={{ color: ['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#fbbf24' : '#22252a' }}>
-                    NAME: {studentName || 'YOUR NAME'}
-                  </div>
+                  {isCustomized && (
+                    <div className="printed-text-overlay" style={{ color: ['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#fbbf24' : '#22252a' }}>
+                      NAME: {studentName || 'YOUR NAME'}
+                    </div>
+                  )}
                   <span style={{ position: 'absolute', bottom: '12px', fontSize: '12px', color: ['Navy Blue', 'Graphite Black', 'Crimson Red', 'Royal Purple'].includes(bagColor) ? '#ffffff' : '#6c804b', fontWeight: 600 }}>
-                    ✨ Live Printing Preview ({selectedBag.name} — {bagColor})
+                    {isCustomized ? `✨ Live Custom Print Preview (${bagColor})` : `🎒 Standard Picture Bag (${bagColor})`}
                   </span>
                 </div>
               </div>
