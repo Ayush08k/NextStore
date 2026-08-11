@@ -1,4 +1,4 @@
-const { db } = require('../../lib/firebase');
+const { db } = require('../lib/firebase');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
