@@ -1,0 +1,84 @@
+/* Mobile & Tablet Specific Responsive Layout & Styling */
+
+/* ════════════ Mobile (≤ 768px): 2 Cards per Row ════════════ */
+@media (max-width: 768px) {
+  .products-grid,
+  .sports-grid,
+  .stationary-grid,
+  .books-grid,
+  .search-results-grid,
+  div[style*="gridTemplateColumns"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Exactly 2 cards per row */
+    gap: 12px !important;
+  }
+
+  .product-card {
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .product-img-wrap {
+    height: 110px !important; /* Shorter height to fit 2.5 rows on screen */
+    padding: 4px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .product-title {
+    font-size: 12.5px !important;
+    height: 32px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .current-price {
+    font-size: 14px !important;
+  }
+
+  .original-price {
+    font-size: 11px !important;
+  }
+
+  /* Cart quantity button optimization for mobile 2-column view */
+  .add-to-cart-btn {
+    padding: 8px 6px !important;
+    font-size: 11.5px !important;
+    border-radius: 8px !important;
+  }
+
+  .cart-qty-control-badge {
+    height: 32px !important;
+    padding: 2px 4px !important;
+  }
+
+  .cart-qty-control-badge span {
+    font-size: 11px !important;
+  }
+
+  .cart-qty-control-badge button {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* ════════════ Tablet (769px to 1024px) ════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .products-grid,
+  .sports-grid,
+  .stationary-grid,
+  .books-grid,
+  .search-results-grid,
+  div[style*="gridTemplateColumns"] {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .product-card {
+    padding: 14px !important;
+  }
+
+  .product-img-wrap {
+    height: 130px !important;
+  }
+}

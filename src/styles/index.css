@@ -1,3 +1,5 @@
+@import './mobile/responsive.css';
+
 :root {
   --primary-green: #6c804b;
   --primary-green-dark: #586a3b;
