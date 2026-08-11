@@ -101,12 +101,21 @@
   .books-grid,
   .dress-grid,
   .search-results-grid,
-  .coaches-grid,
-  div[class*="grid-"] {
+  .coaches-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important; /* Strictly 2 cards in total width */
     gap: 10px !important;
     margin-bottom: 24px !important;
+  }
+
+  /* Stack form grids in 1 single column on mobile */
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .checkout-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
   }
 
   /* Product Card Sizing: Calibrated to fit exactly 2.5 rows on screen */

@@ -69,52 +69,56 @@ export const ExtraCurricularPage = () => {
           filteredCoaches.map((coach) => (
             <div
               key={coach.id}
-              className="product-card"
+              className="product-card coach-card"
               style={{
                 background: '#ffffff',
                 border: '1px solid #e5e7eb',
                 borderRadius: '16px',
-                padding: '24px',
+                padding: '14px',
                 display: 'flex',
-                gap: '20px'
+                flexDirection: 'column',
+                justifyContent: 'space-between'
               }}
             >
-              <img
-                src={coach.image}
-                alt={coach.name}
-                style={{ width: '110px', height: '110px', borderRadius: '50%', objectFit: 'cover' }}
-              />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
-                    <h3 style={{ fontSize: '18px', fontWeight: 700 }}>{coach.name}</h3>
-                    <p style={{ color: '#6c804b', fontWeight: 600, fontSize: '14px' }}>{coach.sport} Coach</p>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#fffbeb', padding: '4px 8px', borderRadius: '6px' }}>
-                    <Star size={14} fill="#f59e0b" color="#f59e0b" />
-                    <span style={{ fontSize: '13px', fontWeight: 700 }}>{coach.rating}</span>
-                  </div>
+              <div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '8px' }}>
+                  <img
+                    src={coach.image}
+                    alt={coach.name}
+                    style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover', marginBottom: '8px', border: '2px solid #f0f4ea' }}
+                  />
+                  <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.2 }}>{coach.name}</h3>
+                  <span style={{ color: '#6c804b', fontWeight: 700, fontSize: '11.5px', marginTop: '2px' }}>{coach.sport} Coach</span>
                 </div>
 
-                <p style={{ fontSize: '13px', color: '#6b7280', margin: '8px 0' }}>
-                  Specialization: {coach.specialization} ({coach.experience_years} Yrs Exp)
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', background: '#fffbeb', padding: '2px 8px', borderRadius: '12px', margin: '4px auto 8px', width: 'fit-content' }}>
+                  <Star size={12} fill="#f59e0b" color="#f59e0b" />
+                  <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#1f2937' }}>{coach.rating}</span>
+                </div>
+
+                <p style={{ fontSize: '11px', color: '#6b7280', textAlign: 'center', margin: '6px 0 10px', height: '28px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                  {coach.specialization} ({coach.experience_years} Yrs Exp)
                 </p>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                  <span style={{ fontSize: '18px', fontWeight: 800 }}>₹{parseFloat(coach.hourly_rate).toFixed(2)} / hr</span>
-                  <button
-                    className="btn-primary-green"
-                    style={{ padding: '8px 16px', fontSize: '13px' }}
-                    onClick={() => {
-                      setSelectedCoach(coach);
-                      const slots = coach.available_slots ? coach.available_slots.split(',') : ['10:00 AM'];
-                      setBookingSlot(slots[0].trim());
-                    }}
-                  >
-                    <Calendar size={14} /> Reserve Slot
-                  </button>
+                <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 800, color: '#22252a' }}>
+                    ₹{parseFloat(coach.hourly_rate).toFixed(2)} / hr
+                  </span>
                 </div>
               </div>
+
+              {/* RESERVE SLOT BUTTON AT THE VERY BOTTOM OF THE CARD */}
+              <button
+                className="btn-primary-green"
+                style={{ width: '100%', padding: '8px 10px', fontSize: '11.5px', borderRadius: '8px', justifyContent: 'center', marginTop: '4px' }}
+                onClick={() => {
+                  setSelectedCoach(coach);
+                  const slots = coach.available_slots ? coach.available_slots.split(',') : ['10:00 AM'];
+                  setBookingSlot(slots[0].trim());
+                }}
+              >
+                <Calendar size={13} /> Reserve Slot
+              </button>
             </div>
           ))
         )}
