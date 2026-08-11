@@ -1,11 +1,23 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
-import { Search, ShoppingCart, Filter, ArrowRight } from 'lucide-react';
+import { Search } from 'lucide-react';
+import SkeletonLoader from '../components/SkeletonLoader';
 import { AddToCartBtn } from '../components/AddToCartBtn';
 
 export const SearchResultsPage = () => {
   const { searchQuery, setSearchQuery, products, addToCart } = useContext(ShopContext);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
+  const [isSearchLoading, setIsSearchLoading] = useState(true);
+
+  // 2-Second Skull Loading animation whenever searchQuery changes
+  useEffect(() => {
+    setIsSearchLoading(true);
+    const timer = setTimeout(() => {
+      setIsSearchLoading(false);
+    }, 2000); // 2 seconds loading before displaying results
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const query = (searchQuery || '').trim().toLowerCase();
 
@@ -44,7 +56,7 @@ export const SearchResultsPage = () => {
       </div>
 
       {/* Category Pills if results exist */}
-      {matchedProducts.length > 0 && categoriesList.length > 2 && (
+      {!isSearchLoading && matchedProducts.length > 0 && categoriesList.length > 2 && (
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '28px' }}>
           {categoriesList.map(cat => (
             <button
@@ -59,8 +71,15 @@ export const SearchResultsPage = () => {
         </div>
       )}
 
-      {/* Results Grid or Empty State */}
-      {filteredResults.length === 0 ? (
+      {/* 2-SECOND SKULL LOADING STATE */}
+      {isSearchLoading ? (
+        <div>
+          <div style={{ fontSize: '14px', color: '#6c804b', fontWeight: 600, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Search size={16} /> Searching store catalog for "{searchQuery}"...
+          </div>
+          <SkeletonLoader type="skull" count={8} />
+        </div>
+      ) : filteredResults.length === 0 ? (
         <div className="form-card" style={{ textAlign: 'center', padding: '60px 20px', background: '#fafaf8' }}>
           <Search size={48} color="#9ca3af" style={{ marginBottom: '16px' }} />
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#1f2937' }}>

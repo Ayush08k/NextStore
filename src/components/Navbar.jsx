@@ -21,7 +21,17 @@ export const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  
+  // Debounce State for 1.5 seconds typing pause
+  const [inputValue, setInputValue] = useState(searchQuery || '');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [isTypingDebouncing, setIsTypingDebouncing] = useState(false);
   const searchContainerRef = useRef(null);
+  const debounceTimerRef = useRef(null);
+
+  useEffect(() => {
+    setInputValue(searchQuery || '');
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,8 +59,24 @@ export const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Filter live suggestions based on input
-  const query = (searchQuery || '').trim().toLowerCase();
+  // 1.5 SECONDS DEBOUNCE EFFECT: Wait 1500ms after user stops typing before showing suggestions
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setInputValue(val);
+    setIsTypingDebouncing(true);
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedQuery(val);
+      setIsTypingDebouncing(false);
+    }, 1500); // 1.5 Seconds delay after user stops typing
+  };
+
+  // Filter live suggestions based on debounced query ONLY
+  const query = (debouncedQuery || '').trim().toLowerCase();
 
   const liveSuggestions = query
     ? (products || []).filter((item) => {
@@ -64,12 +90,18 @@ export const Navbar = () => {
     : [];
 
   const handleExecuteSearch = (searchTerm) => {
-    const termToSearch = searchTerm !== undefined ? searchTerm : searchQuery;
+    const termToSearch = searchTerm !== undefined ? searchTerm : inputValue;
     if (!termToSearch || !termToSearch.trim()) return;
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
 
     addSearchHistory(termToSearch);
     setSearchQuery(termToSearch);
+    setDebouncedQuery(termToSearch);
     setIsSearchFocused(false);
+    setIsTypingDebouncing(false);
     setActiveSection('SearchResults');
   };
 
@@ -134,8 +166,8 @@ export const Navbar = () => {
             <input
               type="text"
               placeholder="Search books, uniforms, gear..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={inputValue}
+              onChange={handleInputChange}
               onFocus={() => setIsSearchFocused(true)}
               onKeyDown={handleKeyDown}
             />
@@ -159,15 +191,22 @@ export const Navbar = () => {
                   overflowY: 'auto'
                 }}
               >
-                {/* 1. LIVE MATCHING SUGGESTIONS */}
-                {query.length > 0 && (
+                {/* 1. TYPING WAITING INDICATOR (1.5s Pause) */}
+                {isTypingDebouncing && (
+                  <div style={{ fontSize: '12px', color: '#6c804b', fontWeight: 600, padding: '6px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="typing-dot-anim">●</span> Waiting for 1.5s pause to fetch suggestions...
+                  </div>
+                )}
+
+                {/* 2. LIVE MATCHING SUGGESTIONS (Appears after 1.5s pause) */}
+                {!isTypingDebouncing && query.length > 0 && (
                   <div style={{ marginBottom: '14px' }}>
                     <div style={{ fontSize: '11px', fontWeight: 800, color: '#6c804b', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <TrendingUp size={12} /> Live Suggestions
                     </div>
                     {liveSuggestions.length === 0 ? (
                       <div style={{ fontSize: '12.5px', color: '#9ca3af', padding: '6px 0' }}>
-                        No direct matches found
+                        No direct matches found for "{debouncedQuery}"
                       </div>
                     ) : (
                       liveSuggestions.map((item) => (
@@ -198,8 +237,8 @@ export const Navbar = () => {
                   </div>
                 )}
 
-                {/* 2. RECENT SEARCH HISTORY */}
-                {searchHistory.length > 0 && (
+                {/* 3. RECENT SEARCH HISTORY */}
+                {!isTypingDebouncing && searchHistory.length > 0 && (
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#6b7280', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -249,7 +288,7 @@ export const Navbar = () => {
                   </div>
                 )}
 
-                {query.length === 0 && searchHistory.length === 0 && (
+                {!isTypingDebouncing && query.length === 0 && searchHistory.length === 0 && (
                   <div style={{ textAlign: 'center', padding: '16px 0', fontSize: '12.5px', color: '#9ca3af' }}>
                     Type a book title, uniform, or sports product...
                   </div>
