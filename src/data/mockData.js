@@ -263,25 +263,166 @@ export const initialSchools = [
   { id: 2, city: 'Kota', name: 'Modern School Kota', address: 'Dadabari, Kota, Rajasthan' },
   { id: 3, city: 'Kota', name: 'Shiv Jyoti International School', address: 'Shrinath Puram, Kota, Rajasthan' },
   { id: 4, city: 'Kota', name: 'Vidhyanjali Academy', address: 'Mahaveer Nagar 3, Kota, Rajasthan' },
-  { id: 5, city: 'Kota', name: 'STAIRS SCHOOL OF EXCELLENCE', address: 'Kunhari, Kota, Rajasthan' },
-  { id: 6, city: 'Jaipur', name: 'Narayana eTechno School', address: 'Pratap Nagar, Jaipur, Rajasthan' },
-  { id: 7, city: 'Jaipur', name: 'ORCHIDS The International School', address: 'Sirsi Road, Jaipur, Rajasthan' },
-  { id: 8, city: 'Jaipur', name: "St. Xavier's School", address: 'C-Scheme, Bhagwan Das Road, Jaipur, Rajasthan' },
-  { id: 9, city: 'Gurugram', name: 'Salwan Public School', address: 'Sector 15 Part 2, Gurugram, Haryana' },
-  { id: 10, city: 'Gurugram', name: 'St. Xavier High School', address: 'Sector 49, Golf Course Ext Rd, Gurugram, Haryana' }
+  { id: 5, city: 'Kota', name: 'Saint James School', address: 'Talwandi, Kota, Rajasthan' },
+  { id: 6, city: 'Kota', name: 'STAIRS SCHOOL OF EXCELLENCE', address: 'Kunhari, Kota, Rajasthan' },
+  { id: 7, city: 'Kota', name: 'New Model Senior Secondary School', address: 'Vigyan Nagar, Kota, Rajasthan' },
+
+  { id: 8, city: 'Jaipur', name: 'Narayana eTechno School', address: 'Pratap Nagar, Jaipur, Rajasthan' },
+  { id: 9, city: 'Jaipur', name: 'ORCHIDS The International School', address: 'Sirsi Road, Jaipur, Rajasthan' },
+  { id: 10, city: 'Jaipur', name: 'Banyan Tree School', address: 'Sector 10, Malviya Nagar, Jaipur, Rajasthan' },
+  { id: 11, city: 'Jaipur', name: "St. Xavier's School", address: 'C-Scheme, Bhagwan Das Road, Jaipur, Rajasthan' },
+  { id: 12, city: 'Jaipur', name: 'Gyan Vihar School Jaipur', address: 'Jagatpura, Jaipur, Rajasthan' },
+  { id: 13, city: 'Jaipur', name: 'Subodh Public School', address: 'Rambagh Circle, Jaipur, Rajasthan' },
+  { id: 14, city: 'Jaipur', name: 'Jayshree Periwal Global School', address: 'Jagatpura, Jaipur, Rajasthan' },
+  { id: 15, city: 'Jaipur', name: 'Sanskar School', address: 'Vishwamitra Marg, Sirsi Road, Jaipur, Rajasthan' },
+  { id: 16, city: 'Jaipur', name: 'Mahaveer Public School', address: 'Vardhman Path, Jaipur, Rajasthan' },
+  { id: 17, city: 'Jaipur', name: 'The Palace School', address: 'City Palace Complex, Jaleb Chowk, Jaipur, Rajasthan' },
+  { id: 18, city: 'Jaipur', name: 'ASIAN PUBLIC SCHOOL', address: 'Vaishali Nagar, Jaipur, Rajasthan' },
+
+  { id: 19, city: 'Gurugram', name: 'Salwan Public School', address: 'Sector 15 Part 2, Gurugram, Haryana' },
+  { id: 20, city: 'Gurugram', name: 'St. Xavier High School', address: 'Sector 49, Golf Course Ext Rd, Gurugram, Haryana' },
+  { id: 21, city: 'Gurugram', name: 'Open Sky School', address: 'Sector 5, Gurugram, Haryana' },
+  { id: 22, city: 'Gurugram', name: 'Ajanta Public School', address: 'Sector 31, Gurugram, Haryana' },
+  { id: 23, city: 'Gurugram', name: "St. Crispin's Senior Secondary School", address: 'New Railway Rd, Gurugram, Haryana' },
+  { id: 24, city: 'Gurugram', name: 'SCR Public School', address: 'Sheetla Mata Rd, Gurugram, Haryana' },
+  { id: 25, city: 'Gurugram', name: 'Ryan International School', address: 'Sector 40, Gurugram, Haryana' }
 ];
 
-export const initialBooks = [
-  { id: 'b1', school_id: '1', class_grade: 'Class 10', board: 'CBSE', subject: 'Mathematics', book_title: 'Mathematics – Textbook for Class X', publisher: 'NCERT', price: 170.00, price_range: '₹160 – ₹180' },
-  { id: 'b2', school_id: '1', class_grade: 'Class 10', board: 'CBSE', subject: 'Science', book_title: 'Science – Textbook for Class X', publisher: 'NCERT', price: 200.00, price_range: '₹190 – ₹210' },
-  { id: 'b3', school_id: '1', class_grade: 'Class 10', board: 'CBSE', subject: 'English', book_title: 'First Flight (Main Textbook)', publisher: 'NCERT', price: 100.00, price_range: '₹90 – ₹110' },
-  { id: 'b4', school_id: '1', class_grade: 'Class 10', board: 'CBSE', subject: 'Social Science', book_title: 'India and Contemporary World II', publisher: 'NCERT', price: 135.00, price_range: '₹125 – ₹140' },
-  { id: 'b5', school_id: '5', class_grade: 'Class 10', board: 'ICSE', subject: 'Mathematics', book_title: 'Concise Mathematics Class 10 (Selina)', publisher: 'Selina Publishers', price: 600.00, price_range: '₹580 – ₹620' }
-];
+// Helper to generate full book sets for all 25 schools across all 10 classes
+const generateFullBooks = () => {
+  const cbseKws = ['salwan', 'xavier', 'ajanta', 'crispin', 'scr', 'open sky', 'ryan', 'orchids', 'narayana', 'banyan', 'gyan vihar', 'subodh', 'jayshree', 'palace', 'mahaveer', 'sanskar', 'shiv', 'modern', 'vidhyanjali', 'james', 'saint'];
+  const rbseKws = ['new model', 'palace', 'asian'];
+  const icseKws = ['stairs'];
 
-export const initialUniforms = [
-  { id: 'u1', school_id: '1', name: 'Suit Salwar (Class 8–10)', dress_type: 'Suit Salwar', gender: 'Girls', applicable_classes: 'Class 8, Class 9, Class 10', price: 650, price_range: '₹550 – ₹750', description: 'Full-sleeve suit salwar in school colors.', sort_order: 1 },
-  { id: 'u2', school_id: '1', name: 'Shirt (Boys & Girls)', dress_type: 'Shirt', gender: 'Unisex', applicable_classes: 'All Classes', price: 280, price_range: '₹230 – ₹330', description: 'Full-sleeve school shirt.', sort_order: 2 },
-  { id: 'u3', school_id: '1', name: 'Boys Pant', dress_type: 'Boys Pant', gender: 'Boys', applicable_classes: 'All Classes', price: 380, price_range: '₹320 – ₹440', description: 'Regular fit school trousers.', sort_order: 3 },
-  { id: 'u4', school_id: '1', name: 'Winter Blazer / Jacket', dress_type: 'Blazer', gender: 'Unisex', applicable_classes: 'All Classes', price: 1100, price_range: '₹950 – ₹1,300', description: 'Wool-blend school blazer with crest.', sort_order: 4 }
-];
+  const cbseClass10 = [
+    ['Mathematics', 'Mathematics Textbook for Class X', 'NCERT', 170.00, '₹160 – ₹180'],
+    ['Science', 'Science Textbook for Class X', 'NCERT', 200.00, '₹190 – ₹210'],
+    ['English', 'First Flight (Main Textbook)', 'NCERT', 100.00, '₹90 – ₹110'],
+    ['English', 'Footprints Without Feet (Supplementary Reader)', 'NCERT', 55.00, '₹50 – ₹60'],
+    ['English', 'Words and Expressions 2 (Workbook)', 'NCERT', 130.00, '₹120 – ₹140'],
+    ['Social Science', 'India and the Contemporary World II (History)', 'NCERT', 135.00, '₹125 – ₹140'],
+    ['Social Science', 'Contemporary India II (Geography)', 'NCERT', 85.00, '₹75 – ₹90'],
+    ['Social Science', 'Democratic Politics II (Political Science)', 'NCERT', 95.00, '₹90 – ₹100'],
+    ['Social Science', 'Understanding Economic Development (Economics)', 'NCERT', 90.00, '₹85 – ₹95'],
+    ['Hindi Course A', 'Kshitij Part 2', 'NCERT', 95.00, '₹90 – ₹100'],
+    ['Hindi Course A', 'Kritika Part 2', 'NCERT', 55.00, '₹50 – ₹60']
+  ];
+
+  const rbseClass10 = [
+    ['Mathematics', 'Ganit Mathematics Class 10', 'RBSE/NCERT', 170.00, '₹160 – ₹180'],
+    ['Science', 'Vigyan Science Class 10', 'RBSE/NCERT', 200.00, '₹190 – ₹210'],
+    ['Social Science', 'Bharat aur Samkalin Vishav II', 'RBSE/NCERT', 125.00, '₹120 – ₹130'],
+    ['Social Science', 'Samkalin Bharat II', 'RBSE/NCERT', 70.00, '₹65 – ₹75'],
+    ['Social Science', 'Loktantrik Rajniti II', 'RBSE/NCERT', 85.00, '₹80 – ₹90'],
+    ['Social Science', 'Arthik Vikas Ki Samajh', 'RBSE/NCERT', 70.00, '₹65 – ₹75'],
+    ['Rajasthan History', 'Rajasthan Ka Itihas Evam Sanskriti', 'RBSE Board', 80.00, '₹70 – ₹90'],
+    ['Hindi Course A', 'Kshitij Part 2', 'RBSE/NCERT', 95.00, '₹90 – ₹100'],
+    ['English', 'First Flight Class 10', 'RBSE/NCERT', 100.00, '₹90 – ₹110']
+  ];
+
+  const icseClass10 = [
+    ['Mathematics', 'Concise Mathematics Class 10 (Selina)', 'Selina Publishers', 600.00, '₹580 – ₹620'],
+    ['Mathematics', 'Understanding ICSE Mathematics Class 10 (M.L. Aggarwal)', 'Avichal Publishing', 575.00, '₹550 – ₹600'],
+    ['Physics', 'Concise Physics Class 10 (Selina)', 'Selina Publishers', 505.00, '₹495 – ₹520'],
+    ['Chemistry', 'Concise Chemistry Class 10 (Selina)', 'Selina Publishers', 455.00, '₹430 – ₹480'],
+    ['Biology', 'Concise Biology Class 10 (Selina)', 'Selina Publishers', 490.00, '₹480 – ₹500'],
+    ['English Language', 'Total English Class 10 (Morning Star)', 'Morning Star', 400.00, '₹380 – ₹420'],
+    ['History & Civics', 'Total History & Civics Class 10 (Morning Star)', 'Morning Star', 440.00, '₹420 – ₹460'],
+    ['Geography', 'Total Geography Class 10 (Morning Star)', 'Morning Star', 525.00, '₹500 – ₹550']
+  ];
+
+  const books = [];
+  let idCounter = 1;
+  const classes = ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'];
+
+  initialSchools.forEach(school => {
+    const n = school.name.toLowerCase();
+    const hasCBSE = cbseKws.some(kw => n.includes(kw));
+    const hasRBSE = rbseKws.some(kw => n.includes(kw));
+    const hasICSE = icseKws.some(kw => n.includes(kw));
+
+    classes.forEach(cls => {
+      const classNum = parseInt(cls.replace('Class ', ''));
+
+      if (hasCBSE) {
+        if (cls === 'Class 10') {
+          cbseClass10.forEach(([subj, title, pub, price, rng]) => {
+            books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'CBSE', subject: subj, book_title: title, publisher: pub, price, price_range: rng });
+          });
+        } else {
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'CBSE', subject: 'Mathematics', book_title: `NCERT Mathematics ${cls}`, publisher: 'NCERT/CBSE', price: 180 + classNum * 15, price_range: `₹${160 + classNum * 15} – ₹${200 + classNum * 15}` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'CBSE', subject: 'Science', book_title: `Integrated Science ${cls}`, publisher: 'Oxford Press', price: 240 + classNum * 20, price_range: `₹${220 + classNum * 20} – ₹${260 + classNum * 20}` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'CBSE', subject: 'English', book_title: `English Grammar & Reader ${cls}`, publisher: 'Cambridge Press', price: 190 + classNum * 15, price_range: `₹${170 + classNum * 15} – ₹${210 + classNum * 15}` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'CBSE', subject: 'Hindi', book_title: `Hindi Vyakaran & Sparsh ${cls}`, publisher: 'NCERT', price: 160 + classNum * 10, price_range: `₹${150 + classNum * 10} – ₹${170 + classNum * 10}` });
+        }
+      }
+
+      if (hasRBSE) {
+        if (cls === 'Class 10') {
+          rbseClass10.forEach(([subj, title, pub, price, rng]) => {
+            books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'RBSE', subject: subj, book_title: title, publisher: pub, price, price_range: rng });
+          });
+        } else {
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'RBSE', subject: 'Mathematics', book_title: `Ganit (गणित) ${cls}`, publisher: 'RBSE Board', price: 170 + classNum * 10, price_range: `₹160 – ₹180` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'RBSE', subject: 'Science', book_title: `Vigyan (विज्ञान) ${cls}`, publisher: 'RBSE Board', price: 200 + classNum * 10, price_range: `₹190 – ₹210` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'RBSE', subject: 'Rajasthan Culture', book_title: `Rajasthan Adhyayan ${cls}`, publisher: 'RBSE Board', price: 80.00, price_range: `₹70 – ₹90` });
+        }
+      }
+
+      if (hasICSE) {
+        if (cls === 'Class 10') {
+          icseClass10.forEach(([subj, title, pub, price, rng]) => {
+            books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'ICSE', subject: subj, book_title: title, publisher: pub, price, price_range: rng });
+          });
+        } else {
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'ICSE', subject: 'Mathematics', book_title: `Selina Concise Mathematics ${cls}`, publisher: 'Selina Publishers', price: 450 + classNum * 15, price_range: `₹400 – ₹500` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'ICSE', subject: 'Science', book_title: `Concise Science ${cls}`, publisher: 'Selina Publishers', price: 420 + classNum * 15, price_range: `₹390 – ₹480` });
+          books.push({ id: `b-${idCounter++}`, school_id: String(school.id), class_grade: cls, board: 'ICSE', subject: 'English', book_title: `Total English ${cls}`, publisher: 'Morning Star', price: 350 + classNum * 10, price_range: `₹320 – ₹400` });
+        }
+      }
+    });
+  });
+
+  return books;
+};
+
+export const initialBooks = generateFullBooks();
+
+// Uniforms for all 25 schools
+const generateFullUniforms = () => {
+  const uniformCatalog = [
+    ['Suit Salwar (Class 8–10)', 'Suit Salwar', 'Girls', 'Class 8, Class 9, Class 10', 650, '₹550 – ₹750', 'Full-sleeve suit salwar in school colors.', 1],
+    ['Suit Salwar (Class 1–7)', 'Suit Salwar', 'Girls', 'Class 1–7', 580, '₹480 – ₹680', 'Comfortable cotton suit salwar for junior classes.', 2],
+    ['Skirt (Girls)', 'Skirt', 'Girls', 'Class 1–10', 320, '₹270 – ₹380', 'Pleated school skirt in school uniform color.', 3],
+    ['White Suit & Salwar', 'White Suit Salwar', 'Girls', 'All Classes', 620, '₹520 – ₹720', 'All-white cotton suit salwar for PT days.', 4],
+    ['Shirt (Boys & Girls)', 'Shirt', 'Unisex', 'All Classes', 280, '₹230 – ₹330', 'Full-sleeve school shirt.', 6],
+    ['White Shirt', 'White Shirt', 'Unisex', 'All Classes', 260, '₹210 – ₹310', 'White cotton school shirt.', 7],
+    ['Boys Pant', 'Boys Pant', 'Boys', 'All Classes', 380, '₹320 – ₹440', 'Regular fit school trousers.', 9],
+    ['White Pant', 'White Pant', 'Boys', 'All Classes', 350, '₹290 – ₹410', 'All-white school trouser.', 10],
+    ['Winter Blazer / Jacket', 'Blazer', 'Unisex', 'All Classes', 1100, '₹950 – ₹1,300', 'Wool-blend school blazer with crest.', 15]
+  ];
+
+  const uniforms = [];
+  let uCounter = 1;
+
+  initialSchools.forEach(school => {
+    uniformCatalog.forEach(([name, dtype, gender, appClasses, price, range, desc, sortOrder]) => {
+      uniforms.push({
+        id: `u-${uCounter++}`,
+        school_id: String(school.id),
+        name,
+        dress_type: dtype,
+        gender,
+        applicable_classes: appClasses,
+        price,
+        price_range: range,
+        description: desc,
+        sort_order: sortOrder
+      });
+    });
+  });
+
+  return uniforms;
+};
+
+export const initialUniforms = generateFullUniforms();

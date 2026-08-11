@@ -31,17 +31,18 @@ export const ShopProvider = ({ children }) => {
     fetchCoaches();
   }, []);
 
-  const addToCart = (product) => {
+  const addToCart = (product, quantityToAdd = 1) => {
+    const qty = typeof quantityToAdd === 'number' && quantityToAdd > 0 ? quantityToAdd : (product.quantity || 1);
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id && item.name === product.name);
       if (existing) {
         return prev.map((item) =>
           item.id === product.id && item.name === product.name
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + qty }
             : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { ...product, quantity: qty }];
     });
   };
 

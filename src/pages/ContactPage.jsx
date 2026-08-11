@@ -133,14 +133,16 @@ export const ContactPage = () => {
               />
             </div>
 
-            <button
-              type="submit"
-              className="btn-primary-green"
-              style={{ width: '100%', padding: '14px', marginTop: '10px' }}
-              disabled={isSendingMsg}
-            >
-              <Send size={16} /> {isSendingMsg ? 'Sending Email...' : 'Send Message'}
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '14px' }}>
+              <button
+                type="submit"
+                className="btn-primary-green"
+                style={{ padding: '10px 24px', fontSize: '14px', borderRadius: '10px' }}
+                disabled={isSendingMsg}
+              >
+                <Send size={16} /> {isSendingMsg ? 'Sending Email...' : 'Send Message'}
+              </button>
+            </div>
           </form>
         )}
       </div>

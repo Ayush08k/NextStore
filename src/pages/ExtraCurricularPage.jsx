@@ -59,12 +59,7 @@ export const ExtraCurricularPage = () => {
         ))}
       </div>
 
-      {bookingSuccess && (
-        <div style={{ background: '#eef2e6', color: '#586a3b', padding: '16px 20px', borderRadius: '8px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <CheckCircle size={20} />
-          <span style={{ fontWeight: 600 }}>{bookingSuccess}</span>
-        </div>
-      )}
+
 
       {/* Coaches Grid */}
       <div className="grid-2" style={{ marginBottom: '40px' }}>

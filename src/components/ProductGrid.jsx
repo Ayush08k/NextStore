@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { ShopContext } from '../context/ShopContext';
-import { Star, ShoppingCart, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AddToCartBtn } from './AddToCartBtn';
 
 export const ProductGrid = ({ title = "Best Selling Products", filterCategory }) => {
   const { products, addToCart, setActiveSection, searchQuery } = useContext(ShopContext);
@@ -143,9 +144,10 @@ export const ProductGrid = ({ title = "Best Selling Products", filterCategory })
                     )}
                   </div>
                 </div>
-                <button className="add-to-cart-btn" onClick={() => addToCart(product)}>
-                  <ShoppingCart size={16} /> Add to Cart
-                </button>
+                <AddToCartBtn
+                  product={product}
+                  onAddToCart={(p, q) => addToCart(p, q)}
+                />
               </div>
             ))}
           </div>
@@ -180,13 +182,14 @@ function MobileCard({ product, addToCart }) {
           )}
         </div>
       </div>
-      <button
-        className="add-to-cart-btn"
-        style={{ fontSize: '12px', padding: '9px 10px' }}
-        onClick={() => addToCart(product)}
-      >
-        <ShoppingCart size={13} /> Add
-      </button>
+      <AddToCartBtn
+        product={product}
+        onAddToCart={(p, q) => addToCart(p, q)}
+        label="Add"
+        addedLabel="Added!"
+        iconSize={13}
+        style={{ fontSize: '12px', padding: '8px 10px' }}
+      />
     </div>
   );
 }

@@ -3,35 +3,51 @@ import React from 'react';
 const SkeletonLoader = ({ type = "product", count = 4 }) => {
   const skeletons = Array(count).fill(0);
 
-  if (type === "product") {
+  if (type === "skull" || type === "skeleton" || type === "list" || type === "product") {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', margin: '20px 0' }}>
         {skeletons.map((_, i) => (
-          <div key={i} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden animate-pulse">
-            <div className="h-48 bg-neutral-200 w-full" />
-            <div className="p-4 space-y-3">
-              <div className="h-4 bg-neutral-200 rounded w-3/4" />
-              <div className="h-3 bg-neutral-200 rounded w-1/2" />
-              <div className="flex justify-between items-center pt-2">
-                <div className="h-5 bg-neutral-200 rounded w-1/4" />
-                <div className="h-8 bg-neutral-200 rounded w-1/3" />
-              </div>
+          <div
+            key={i}
+            className="skeleton-card"
+            style={{
+              background: 'linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%)',
+              backgroundSize: '200% 100%',
+              borderRadius: '16px',
+              padding: '20px',
+              border: '1px solid #e5e7eb',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              animation: 'skeletonShimmer 1.5s infinite linear'
+            }}
+          >
+            {/* Skull / Avatar placeholder circle */}
+            <div
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                background: '#d1d5db',
+                shrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="12" r="1.5" fill="#9ca3af" />
+                <circle cx="15" cy="12" r="1.5" fill="#9ca3af" />
+                <path d="M8 20v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <path d="M12 2a8 8 0 0 0-8 8v4a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4v-4a8 8 0 0 0-8-8z" />
+              </svg>
             </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
-  if (type === "list") {
-    return (
-      <div className="space-y-4">
-        {skeletons.map((_, i) => (
-          <div key={i} className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4 flex gap-4 animate-pulse">
-            <div className="w-16 h-16 bg-neutral-200 rounded-lg shrink-0" />
-            <div className="space-y-2 flex-1 py-1">
-              <div className="h-4 bg-neutral-200 rounded w-1/3" />
-              <div className="h-3 bg-neutral-200 rounded w-1/4" />
+            {/* Skeleton lines */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ width: '45%', height: '16px', borderRadius: '6px', background: '#d1d5db' }} />
+              <div style={{ width: '75%', height: '14px', borderRadius: '6px', background: '#e5e7eb' }} />
+              <div style={{ width: '30%', height: '18px', borderRadius: '6px', background: '#d1d5db' }} />
             </div>
           </div>
         ))}
@@ -40,8 +56,8 @@ const SkeletonLoader = ({ type = "product", count = 4 }) => {
   }
 
   return (
-    <div className="flex justify-center items-center py-12">
-      <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
+      <div style={{ width: '36px', height: '36px', border: '4px solid #6c804b', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
     </div>
   );
 };

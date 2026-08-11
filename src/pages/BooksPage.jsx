@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { BookOpen, CheckCircle, ShoppingCart, Award, Sparkles, Compass } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
-
 import { initialSchools, initialBooks } from '../data/mockData';
+import { AddToCartBtn } from '../components/AddToCartBtn';
 
 export const BooksPage = () => {
   const { addToCart } = useContext(ShopContext);
@@ -212,13 +212,17 @@ export const BooksPage = () => {
   useEffect(() => {
     if (selectedSchoolId && selectedClass) {
       setLoading(true);
-      const filtered = initialBooks.filter(b => 
-        String(b.school_id) === String(selectedSchoolId) &&
-        b.class_grade === selectedClass &&
-        b.board === selectedBoard
-      );
-      setBooks(filtered);
-      setLoading(false);
+      const timer = setTimeout(() => {
+        const filtered = initialBooks.filter(b => 
+          String(b.school_id) === String(selectedSchoolId) &&
+          b.class_grade === selectedClass &&
+          b.board === selectedBoard
+        );
+        setBooks(filtered);
+        setLoading(false);
+      }, 1000); // 1-second skull loading animation
+
+      return () => clearTimeout(timer);
     }
   }, [selectedSchoolId, selectedClass, selectedBoard]);
 
@@ -262,15 +266,15 @@ export const BooksPage = () => {
     setTimeout(() => setKitAddedMsg(''), 4000);
   };
 
-  const handleAddBook = (book) => {
+  const handleAddBook = (book, qty = 1) => {
     addToCart({
       id: `book-${book.id}`,
       name: book.book_title || book.title,
       category: 'School Books',
       price: book.price,
       image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80'
-    });
-    setKitAddedMsg(`"${book.book_title || book.title}" added to your cart!`);
+    }, qty);
+    setKitAddedMsg(`"${book.book_title || book.title}" (${qty}) added to your cart!`);
     setTimeout(() => setKitAddedMsg(''), 4000);
   };
 
@@ -367,13 +371,7 @@ export const BooksPage = () => {
         </div>
       </div>
 
-      {/* Success Notification */}
-      {kitAddedMsg && (
-        <div style={{ background: '#eef2e6', color: '#586a3b', padding: '14px 20px', borderRadius: '8px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <CheckCircle size={20} />
-          <span style={{ fontWeight: 600 }}>{kitAddedMsg}</span>
-        </div>
-      )}
+
 
       {/* Official Prescribed Books Display */}
       {loading ? (
@@ -438,13 +436,13 @@ export const BooksPage = () => {
                   </div>
                 </div>
 
-                <button
+                <AddToCartBtn
+                  product={book}
+                  onAddToCart={(b, q) => handleAddBook(b, q)}
                   className="btn-outline-grey"
+                  label="+ Add Book"
                   style={{ padding: '8px 14px', fontSize: '13px' }}
-                  onClick={() => handleAddBook(book)}
-                >
-                  + Add Book
-                </button>
+                />
               </div>
             ))}
           </div>
@@ -453,13 +451,6 @@ export const BooksPage = () => {
         <div className="form-card" style={{ textAlign: 'center', padding: '40px', color: '#6b7280', marginBottom: '40px' }}>
           <BookOpen size={48} color="#d1d5db" style={{ marginBottom: '12px' }} />
           <p>No prescribed {selectedBoard} booklist found for the selected school and class.</p>
-          <button
-            className="btn-outline-grey"
-            style={{ marginTop: '14px', fontSize: '13px' }}
-            onClick={() => setSelectedBoard(selectedBoard === 'CBSE' ? 'RBSE' : 'CBSE')}
-          >
-            Switch to {selectedBoard === 'CBSE' ? 'RBSE Board' : 'CBSE Board'}
-          </button>
         </div>
       )}
 

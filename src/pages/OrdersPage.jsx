@@ -209,14 +209,16 @@ export const OrdersPage = () => {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="btn-primary-green"
-                style={{ width: '100%', padding: '14px', marginTop: '10px' }}
-                disabled={isSubmittingOrder || cart.length === 0}
-              >
-                {isSubmittingOrder ? 'Submitting Order...' : 'Submit Doorstep Delivery Order'}
-              </button>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '14px' }}>
+                <button
+                  type="submit"
+                  className="btn-primary-green"
+                  style={{ padding: '11px 26px', fontSize: '14px', borderRadius: '10px' }}
+                  disabled={isSubmittingOrder || cart.length === 0}
+                >
+                  {isSubmittingOrder ? 'Submitting Order...' : 'Submit Doorstep Delivery Order'}
+                </button>
+              </div>
             </form>
           </div>
 

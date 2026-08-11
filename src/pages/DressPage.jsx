@@ -3,6 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import { ShoppingCart, Shirt, MapPin, School, SlidersHorizontal, ImageOff } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { initialSchools, initialUniforms } from '../data/mockData';
+import { AddToCartBtn } from '../components/AddToCartBtn';
 
 const GENDER_FILTERS = ['All', 'Boys', 'Girls', 'Unisex'];
 
@@ -65,9 +66,13 @@ export const DressPage = () => {
   useEffect(() => {
     if (!selectedSchoolId) { setUniforms([]); return; }
     setLoading(true);
-    const filtered = initialUniforms.filter(u => String(u.school_id) === String(selectedSchoolId));
-    setUniforms(filtered);
-    setLoading(false);
+    const timer = setTimeout(() => {
+      const filtered = initialUniforms.filter(u => String(u.school_id) === String(selectedSchoolId));
+      setUniforms(filtered);
+      setLoading(false);
+    }, 1000); // 1-second skull loading animation
+
+    return () => clearTimeout(timer);
   }, [selectedSchoolId]);
 
   const filtered = uniforms.filter(u =>
@@ -77,16 +82,16 @@ export const DressPage = () => {
   const selectedSchoolObj = schools.find(s => s.id === parseInt(selectedSchoolId));
   const hasSchool = Boolean(selectedSchoolId && selectedSchoolObj);
 
-  const handleAdd = (uniform) => {
+  const handleAdd = (uniform, qty = 1) => {
     addToCart({
       id:       `uniform-${uniform.id}`,
       name:     `${uniform.name} — ${selectedSchoolObj?.name}`,
       category: 'Dress',
       price:    uniform.price,
       image:    uniform.image || ''
-    });
+    }, qty);
     setAddedId(uniform.id);
-    setTimeout(() => setAddedId(null), 2500);
+    setTimeout(() => setAddedId(null), 2000);
   };
 
   return (
@@ -265,29 +270,15 @@ export const DressPage = () => {
                         </span>
                       )}
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                        <div>
-                          <span style={{ fontSize: '18px', fontWeight: 900, color: '#22252a' }}>
-                            ₹{parseFloat(uniform.price).toFixed(2)}
-                          </span>
-                          {uniform.price_range && (
-                            <span style={{ fontSize: '11px', color: '#9ca3af', display: 'block' }}>{uniform.price_range}</span>
-                          )}
-                        </div>
-
-                        <button
-                          className={isAdded ? 'btn-primary-green' : 'btn-outline-grey'}
-                          style={{ padding: '8px 14px', fontSize: '12.5px', borderRadius: '10px' }}
-                          onClick={() => handleAdd(uniform)}
-                        >
-                          {isAdded ? (
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>✓ Added</span>
-                          ) : (
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                              <ShoppingCart size={14} /> Add
-                            </span>
-                          )}
-                        </button>
+                      <div style={{ marginTop: '12px' }}>
+                        <AddToCartBtn
+                          product={uniform}
+                          onAddToCart={(u, q) => handleAdd(u, q)}
+                          label="Add Uniform"
+                          addedLabel="Added!"
+                          iconSize={13}
+                          style={{ fontSize: '12.5px', padding: '8px' }}
+                        />
                       </div>
                     </div>
                   </div>

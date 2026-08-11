@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
-import { ShoppingBag, Sparkles, ShoppingCart, Search, Filter, CheckCircle } from 'lucide-react';
+import { ShoppingBag, Sparkles, Search, Filter, CheckCircle } from 'lucide-react';
 import SkeletonLoader from '../components/SkeletonLoader';
+import { AddToCartBtn } from '../components/AddToCartBtn';
 
 export const StationaryPage = () => {
   const { products, addToCart, isLoadingProducts } = useContext(ShopContext);
@@ -134,13 +135,7 @@ export const StationaryPage = () => {
         </div>
       </div>
 
-      {/* Cart Feedback Notification */}
-      {addedMsg && (
-        <div style={{ background: '#eef2e6', color: '#586a3b', padding: '14px 20px', borderRadius: '8px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <CheckCircle size={20} />
-          <span style={{ fontWeight: 600 }}>{addedMsg}</span>
-        </div>
-      )}
+
 
       {/* SEARCH BAR & CATEGORY FILTERS */}
       <div className="form-card" style={{ marginBottom: '30px', background: '#ffffff', padding: '24px' }}>
@@ -220,11 +215,13 @@ export const StationaryPage = () => {
                     <span className="original-price">₹{parseFloat(item.original_price).toFixed(2)}</span>
                   )}
                 </div>
+                <AddToCartBtn
+                  product={item}
+                  onClick={() => handleAddToCart(item)}
+                  className="btn-primary-green"
+                  style={{ width: '100%', borderRadius: '10px', fontSize: '13px', padding: '10px' }}
+                />
               </div>
-
-              <button className="add-to-cart-btn" onClick={() => handleAddToCart(item)}>
-                <ShoppingCart size={16} /> Add to Cart
-              </button>
             </div>
           ))}
         </div>
