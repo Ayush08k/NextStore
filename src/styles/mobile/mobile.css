@@ -204,6 +204,9 @@
     padding: 16px 0 !important;
   }
 
+  /* Make hero-card a flex column so we can reorder its direct children:
+     hero-content (pill + title + subtitle + buttons + customers) and
+     hero-image-container (the right-column image on desktop) */
   .hero-card {
     display: flex !important;
     flex-direction: column !important;
@@ -211,10 +214,20 @@
     text-align: center !important;
     padding: 24px 16px !important;
     border-radius: 24px !important;
-    gap: 16px !important;
+    gap: 0 !important;
   }
 
+  /* hero-content: show pill, title, subtitle first — then image — then buttons, customers */
+  /* We split hero-content appearance by using order on the card's two flex children */
+  /* Order 1: image after subtitle but before buttons is achieved by splitting hero-content */
+  /* Since buttons & customers are inside hero-content, the image (sibling) appears BETWEEN */
+  /* hero-content (which has everything) and nothing else by default.                       */
+  /* Best achievable: hero-content first (text + buttons + customers), image second.        */
+  /* To show image BETWEEN text and buttons we duplicate via CSS — not possible without DOM change. */
+  /* So: image appears AFTER the text block (pill+title+subtitle+buttons+customers) on mobile. */
+
   .hero-content {
+    order: 1 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -222,33 +235,12 @@
     width: 100% !important;
   }
 
-  .hero-pill {
-    order: 1 !important;
-    margin: 0 auto 12px auto !important;
-  }
-
-  .hero-title {
-    order: 2 !important;
-    font-size: 24px !important;
-    line-height: 1.25 !important;
-    text-align: center !important;
-    margin-bottom: 12px !important;
-  }
-
-  .hero-subtitle {
-    order: 3 !important;
-    font-size: 13px !important;
-    text-align: center !important;
-    margin: 0 auto 14px auto !important;
-    max-width: 95% !important;
-  }
-
   .hero-image-container {
-    order: 4 !important;
+    order: 2 !important;
     width: 100% !important;
-    max-width: 280px !important;
-    height: 190px !important;
-    margin: 12px auto 20px auto !important;
+    max-width: 300px !important;
+    height: 200px !important;
+    margin: 16px auto 8px auto !important;
     border-radius: 18px !important;
     overflow: hidden !important;
     display: flex !important;
@@ -264,13 +256,32 @@
     border-radius: 18px !important;
   }
 
+  /* Inner hero-content children: vertical centered layout */
+  .hero-pill {
+    margin: 0 auto 12px auto !important;
+  }
+
+  .hero-title {
+    font-size: 24px !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero-subtitle {
+    font-size: 13px !important;
+    text-align: center !important;
+    margin: 0 auto 14px auto !important;
+    max-width: 95% !important;
+  }
+
   .hero-buttons {
-    order: 5 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     width: 100% !important;
     gap: 10px !important;
+    margin-bottom: 16px !important;
   }
 
   .hero-buttons button {
@@ -280,13 +291,12 @@
   }
 
   .hero-customers {
-    order: 6 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    margin-top: 16px !important;
+    margin-top: 8px !important;
     gap: 8px !important;
   }
 
@@ -295,6 +305,8 @@
   }
 
   /* Special Offer Card Mobile Alignment */
+  /* offer-content (text + button) and offer-img-wrap (image) are direct grid children on desktop.
+     On mobile: make the card a flex column so we can reorder them. */
   .special-offer-card {
     display: flex !important;
     flex-direction: column !important;
@@ -306,6 +318,7 @@
   }
 
   .offer-content {
+    order: 1 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -313,32 +326,13 @@
     width: 100% !important;
   }
 
-  .offer-tag {
-    order: 1 !important;
-    margin: 0 auto 8px auto !important;
-  }
-
-  .offer-heading {
-    order: 2 !important;
-    font-size: 26px !important;
-    text-align: center !important;
-    margin-bottom: 10px !important;
-  }
-
-  .offer-subtext {
-    order: 3 !important;
-    font-size: 13px !important;
-    text-align: center !important;
-    margin: 0 auto 12px auto !important;
-    max-width: 95% !important;
-  }
-
+  /* Image sibling appears AFTER text block on mobile */
   .offer-img-wrap {
-    order: 4 !important;
+    order: 2 !important;
     width: 100% !important;
-    max-width: 280px !important;
-    height: 190px !important;
-    margin: 12px auto 20px auto !important;
+    max-width: 300px !important;
+    height: 200px !important;
+    margin: 0 auto !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -347,8 +341,25 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
   }
 
+  /* Inner offer-content children */
+  .offer-tag {
+    margin: 0 auto 8px auto !important;
+  }
+
+  .offer-heading {
+    font-size: 26px !important;
+    text-align: center !important;
+    margin-bottom: 10px !important;
+  }
+
+  .offer-subtext {
+    font-size: 13px !important;
+    text-align: center !important;
+    margin: 0 auto 12px auto !important;
+    max-width: 95% !important;
+  }
+
   .offer-content .btn-primary-green {
-    order: 5 !important;
     width: 100% !important;
     max-width: 260px !important;
     justify-content: center !important;

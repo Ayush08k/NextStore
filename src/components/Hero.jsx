@@ -21,17 +21,6 @@ export const Hero = () => {
               Explore our wide range of high-quality products at affordable prices. Shop now and enjoy the best deals!
             </p>
 
-            {/* Showcase Image directly after title & subtitle */}
-            <div className="hero-image-container">
-              <img
-                src="/images/hero_showcase.png"
-                alt="Discover The Best Products for You"
-                onError={(e) => {
-                  e.target.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80";
-                }}
-              />
-            </div>
-
             <div className="hero-buttons">
               <button className="btn-primary-green" onClick={() => setActiveSection('Books')}>
                 Shop now <ArrowRight size={16} />
@@ -49,6 +38,17 @@ export const Hero = () => {
               </div>
               <span className="customer-text">Trusted by 10,000+ Happy Customers</span>
             </div>
+          </div>
+
+          {/* Image as grid sibling — right column on desktop, reordered via CSS on mobile */}
+          <div className="hero-image-container">
+            <img
+              src="/images/hero_showcase.png"
+              alt="Discover The Best Products for You"
+              onError={(e) => {
+                e.target.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80";
+              }}
+            />
           </div>
         </div>
       </div>
